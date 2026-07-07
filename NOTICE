@@ -1,0 +1,23 @@
+This project includes code derived from Griffin.
+ 
+  Upstream:  https://github.com/adoebley/Griffin
+  Commit:    b624c7a2ea7b8758b6eebd424066c815bfeece61
+  License:   The Clear BSD License
+  Copyright: (c) 2021 Fred Hutchinson Cancer Research Center
+ 
+The original Clear BSD license terms are retained and apply to the derived
+files. A copy of the license should be kept alongside this NOTICE (copy the
+LICENSE file from the upstream Griffin repository).
+ 
+Summary of modifications in this project:
+  - gc_correction/griffin_GC_counts.py: optimized GC counting (C-level fast
+    path with an exact, seeded fallback for ambiguous bases), itertuples
+    iteration, finer parallel chunking, and pandas>=2.0 compatible
+    aggregation. Output is bit-identical to the original.
+  - gc_correction/griffin_GC_bias.py: replaced removed pandas .append calls
+    with pd.concat (output unchanged); added an optional --no_plots flag and a
+    headless-safe matplotlib backend; smoothing left unchanged.
+  - common/manifest.py: helper to read/write samples.GC.yaml (the format is
+    byte-compatible with the original Griffin snakefile output).
+  - workflows/run_gc_correction.sh: terminal driver (no Snakemake/SLURM).
+  - tests/: correctness, regression, and demo-comparison scripts.

@@ -1,0 +1,26 @@
+name: griffin
+# Channel order matters: conda-forge first, then bioconda. Combined with
+# `channel_priority: strict` (set below / in your conda config) this is what
+# prevents the conda-forge vs defaults conflicts (e.g. the libffi error).
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  # --- core runtime ---
+  - python=3.11
+  - pysam            # BAM/CRAM reading + reference fasta access
+  - samtools         # CRAM->BAM, indexing, fast (multithreaded) decode
+  - numpy
+  - pandas>=2.0      # the modernized scripts target pandas 2.x
+
+  # --- stage 1 (GC correction) ---
+  - pyyaml           # manifest.py read side
+  - matplotlib-base  # GC_bias QC plots (skippable via --no_plots; -base = no GUI deps)
+
+  # --- nice-to-have for reproducible builds ---
+  - conda-lock       # to generate the fully-pinned lock file for the container
+
+# NOTE: this lists the GC-correction stage dependencies. When you fold in the
+# nucleosome_profiling scripts, add any extra packages they need here (or keep
+# them as a separate optional group if you want GC-correction installs to stay
+# lean).

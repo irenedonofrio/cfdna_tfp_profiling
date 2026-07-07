@@ -1,0 +1,23 @@
+# Stage 1 (GC correction) config — GC-correction parameters, NOT Stage-2 profiling.
+# map_q / size_range here are the GC-correction defaults you validated byte-identical.
+# Do NOT copy Stage-2's mapq:30 / frag_len 120-200 in here — that would break byte-identity.
+
+deployment:
+  # --- the ONE line to change when you consolidate refs into tfp_profiling/refs ---
+  refs_root:      /cluster/work/medinfmk/cfDNA-SeCT/results/BAM/gc_uncorrected/griffin/Ref
+  # all of these are relative to refs_root (join happens in the driver):
+  reference_fa:   hg38.fa                                                  # needs hg38.fa.fai beside it
+  mappable_bed:   k100_minus_exclusion_lists.mappable_regions.hg38.bed
+  chrom_sizes:    hg38.standard.chrom.sizes
+  genome_gc_freq: genome_GC_frequency                                      # the dir of <name>.<len>bp.GC_frequency.txt files
+
+  sample_sheet:   stage1_samples.tsv        # relative -> resolved next to this config file
+  # results_root: GC_counts/ and GC_bias/ are written under here. Set so GC_bias/
+  # lands where your Stage-2 samples.tsv expects it (…/irene_tfp/data/GC_bias/…):
+  results_root:   /cluster/work/medinfmk/cfDNA-SeCT/irene_tfp/data
+  threads:        8                         # prefix-sum peaks ~3 GB at 8 threads; request --mem>=8G
+
+method:
+  map_q:      20            # GC-correction default (NOT Stage-2's 30)
+  size_range: [15, 500]     # GC-correction default (NOT Stage-2's 120-200)
+  plots:      false         # QC PDFs off by default; override per-run with --plots

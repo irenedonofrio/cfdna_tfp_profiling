@@ -1,0 +1,23 @@
+deployment:
+  sample_sheet:  /cluster/work/medinfmk/cfDNA-SeCT/irene_tfp/scripts_edited/samples.tsv
+  reference_fa:  /cluster/work/medinfmk/cfDNA-SeCT/results/BAM/gc_uncorrected/griffin/Ref/hg38.fa
+  mappable_bed:  /cluster/work/medinfmk/cfDNA-SeCT/results/BAM/gc_uncorrected/griffin/Ref/k100_minus_exclusion_lists.mappable_regions.hg38.bed
+  chrom_sizes:   /cluster/work/medinfmk/cfDNA-SeCT/irene_tfp/refs/hg38.standard.chrom.sizes
+  tf_dir:        /cluster/work/medinfmk/cfDNA-SeCT/irene_tfp/data/TFBS_10000ms
+  results_root:  /cluster/work/medinfmk/cfDNA-SeCT/irene_tfp/results/samples
+  tmpdir:        /tmp
+  threads:       4
+method:
+  mapq:          30
+  gc_bias_min:   0.05
+  frag_len_min:  120
+  frag_len_max:  200
+  window_size:      5000
+  step:             15
+  smoothing_length: 165
+  fft_window:       960
+  fft_index:        10
+  center_window:    30
+  save_window:      1000
+  autosomes: [chr1, chr2, chr3, chr4, chr5, chr6, chr7, chr8, chr9, chr10, chr11, chr12,
+              chr13, chr14, chr15, chr16, chr17, chr18, chr19, chr20, chr21, chr22]
