@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # run_all.sh — MASTER: Stage 1 (GC correction) -> Stage 2 (profiling), chained.
 #
-# Stage 1 writes gc_correction_manifest.tsv (sample -> real gc_bias
+# The seam: Stage 1 writes gc_correction_manifest.tsv (sample -> real gc_bias
 # path). This master turns that manifest into Stage 2's sample sheet (via
 # build_stage2_sheet.py), so Stage 2 reads Stage 1's ACTUAL outputs instead of
-# a hand-maintained sheet. Then it loops Stage 2.
+# a hand-maintained sheet. Then it loops Stage 2 (one sample per invocation).
 #
 # The Stage-1 sample sheet is the single source of truth for which samples exist;
 # everything downstream flows from it.
@@ -78,14 +78,20 @@ fi
 
 # -------- locate Stage-1 manifest --------
 # If --out-root was given, the manifest is under the overridden Stage-1 root;
-# otherwise read results_root from the gc config.
+# otherwise read results_root from the gc config. A RELATIVE results_root is
+# anchored to the GC config's own folder (same rule the drivers use), so the
+# repo can be run from anywhere.
 if [ -n "$OUT_ROOT" ]; then
   MANIFEST="$GC_RESULTS_ROOT/gc_correction_manifest.tsv"
 else
   MANIFEST="$("$PY" - "$GC_CONFIG" <<'PY'
 import sys, yaml, os
-c = yaml.safe_load(open(sys.argv[1]))
-print(os.path.join(str(c['deployment']['results_root']).rstrip('/'), 'gc_correction_manifest.tsv'))
+cfg_path = sys.argv[1]
+cfg_dir = os.path.dirname(os.path.abspath(cfg_path))
+c = yaml.safe_load(open(cfg_path))
+rr = str(c['deployment']['results_root'])
+rr = rr if os.path.isabs(rr) else os.path.normpath(os.path.join(cfg_dir, rr))
+print(os.path.join(rr.rstrip('/'), 'gc_correction_manifest.tsv'))
 PY
 )"
 fi
@@ -94,7 +100,8 @@ echo "### Stage-1 manifest: $MANIFEST ###"
 
 # -------- build Stage-2 sheet from manifest, into the path Stage-2 config expects --------
 # sample_sheet + fcc_root both come from the Stage-2 config (helper is strict:
-# fcc_root must exist in deployment: or this errors out clearly).
+# fcc_root must exist in deployment: or this errors out clearly). Both are returned
+# already anchored/absolute by config_helper.py.
 eval "$("$PY" "$HELPER" config "$PROF_CONFIG" sample_sheet fcc_root)"   # -> SAMPLE_SHEET, FCC_ROOT
 # --out-root overrides the config fcc_root so FCC lands under the same base
 [ -n "$OUT_ROOT" ] && FCC_ROOT="$FCC_ROOT_OVERRIDE"

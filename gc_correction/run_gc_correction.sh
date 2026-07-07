@@ -13,6 +13,11 @@
 #     conda activate griffin && bash run_gc_correction.sh          (interactive)
 #     micromamba run -n griffin bash run_gc_correction.sh          (container)
 #
+# PATHS: relative values in the config (refs_root, sample_sheet, results_root) are
+# resolved against the CONFIG FILE's own directory, NOT the shell's CWD — so the
+# whole project folder is relocatable. refs_root can also be overridden by the
+# TFP_REFS environment variable (for refs mounted outside the repo).
+#
 # name convention (option a): bam_file_name = BAM basename minus '.bam'
 #     e.g. SeCT-26_t2.sortByCoord.bam -> SeCT-26_t2.sortByCoord
 set -euo pipefail
@@ -44,17 +49,27 @@ CFG_VARS=$(python - "$CONFIG" <<'PY'
 import sys, os, shlex, yaml
 cfg = yaml.safe_load(open(sys.argv[1]))
 d, m = cfg['deployment'], cfg['method']
-root = str(d['refs_root']).rstrip('/')
 cfg_dir = os.path.dirname(os.path.abspath(sys.argv[1]))
-def rel(p): return p if os.path.isabs(p) else os.path.join(root, p)
-def sheet(p): return p if os.path.isabs(p) else os.path.join(cfg_dir, p)
+
+# Relative paths in the config are resolved against the CONFIG FILE's own folder
+# (where this config lives), NOT the shell's current directory. That makes the whole
+# project folder movable/mountable anywhere without editing the config.
+def anchor(p):
+    return p if os.path.isabs(p) else os.path.normpath(os.path.join(cfg_dir, p))
+
+# refs_root: an optional TFP_REFS env var wins (use it when refs live OUTSIDE the repo,
+# e.g. a shared filesystem or a read-only container mount). Otherwise the config value
+# is used, anchored to the config folder — so `../refs` resolves to <repo>/refs.
+refs_root = anchor(os.environ.get('TFP_REFS') or d['refs_root'])
+def rel(p): return p if os.path.isabs(p) else os.path.join(refs_root, p)
+
 def q(k, v): print(f'{k}={shlex.quote(str(v))}')
 q('REF_FA',         rel(d['reference_fa']))
 q('MAPPABLE_BED',   rel(d['mappable_bed']))
 q('CHROM_SIZES',    rel(d['chrom_sizes']))
 q('GENOME_GC_FREQ', rel(d['genome_gc_freq']))
-q('SAMPLE_SHEET',   sheet(d['sample_sheet']))
-q('RESULTS_ROOT',   str(d['results_root']).rstrip('/'))
+q('SAMPLE_SHEET',   anchor(d['sample_sheet']))
+q('RESULTS_ROOT',   anchor(d['results_root']).rstrip('/'))
 q('THREADS',        d.get('threads', 4))
 q('MAP_Q',          m['map_q'])
 sr = m['size_range']; q('SIZE_LO', sr[0]); q('SIZE_HI', sr[1])
@@ -63,7 +78,9 @@ PY
 ) || { echo "ERROR: could not parse config (is PyYAML available in the env?)"; exit 1; }
 eval "$CFG_VARS"
 
-# CLI override beats config (keeps all Stage-1 outputs + manifest under one root)
+# CLI override beats config (keeps all Stage-1 outputs + manifest under one root).
+# NOTE: an override given on the CLI is used verbatim (resolved against CWD if relative)
+# — it's an explicit runtime choice, so it is intentionally NOT config-anchored.
 [ -n "$RESULTS_ROOT_OVERRIDE" ] && RESULTS_ROOT="${RESULTS_ROOT_OVERRIDE%/}"
 
 # mappable_name = mappable bed basename minus .bed  (derived, not a config key)

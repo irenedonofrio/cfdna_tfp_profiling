@@ -1,10 +1,21 @@
 deployment:
-  sample_sheet:  /cluster/work/medinfmk/cfDNA-SeCT/irene_tfp/scripts_edited/samples.tsv
-  reference_fa:  /cluster/work/medinfmk/cfDNA-SeCT/results/BAM/gc_uncorrected/griffin/Ref/hg38.fa
-  mappable_bed:  /cluster/work/medinfmk/cfDNA-SeCT/results/BAM/gc_uncorrected/griffin/Ref/k100_minus_exclusion_lists.mappable_regions.hg38.bed
-  chrom_sizes:   /cluster/work/medinfmk/cfDNA-SeCT/irene_tfp/refs/hg38.standard.chrom.sizes
-  tf_dir:        /cluster/work/medinfmk/cfDNA-SeCT/irene_tfp/data/TFBS_10000ms
-  results_root:  /cluster/work/medinfmk/cfDNA-SeCT/irene_tfp/results/samples
+  # Refs bundled in the project, resolved by config_helper.py: refs_root is anchored
+  # to THIS config's folder (nucleosome_profiling/), so ../refs -> <repo>/refs, and the
+  # four ref entries below join onto it. Override with the TFP_REFS env var if refs are
+  # mounted outside the repo (container).
+  refs_root:     ../refs
+  reference_fa:  hg38.fa                                                   # + hg38.fa.fai beside it
+  mappable_bed:  k100_minus_exclusion_lists.mappable_regions.hg38.bed
+  chrom_sizes:   hg38.standard.chrom.sizes
+  tf_dir:        TFBS_10000ms          # relative to refs_root — assumes the TF beds were
+                                       # moved into refs/. If they live elsewhere, put an
+                                       # ABSOLUTE path here (absolute values pass through).
+  # Generated Stage-2 sheet, written next to this config by build_stage2_sheet.py:
+  sample_sheet:  samples.tsv           # relative -> nucleosome_profiling/samples.tsv
+  # Outputs inside the project (anchored to this config's folder). Per sample,
+  # <repo>/results/samples/<id>/ then holds fcc/, profiling/, logs/, all_TF_features.tsv.
+  results_root:  ../results/samples
+  fcc_root:      ../results/samples
   tmpdir:        /tmp
   threads:       4
 method:

@@ -61,6 +61,26 @@ def resolve(cli_value, config_value, fallback):
         return config_value
     return fallback
 
+# CHANGED: resolve a ref-relative config path (e.g. chrom_sizes) the SAME way
+# config_helper.py does, so this script works standalone with a RELATIVE config
+# (not only when the driver passes an absolute --chrom_sizes). Rule: a relative
+# ref value is joined onto refs_root; refs_root is TFP_REFS (env) or the config's
+# refs_root, anchored to the CONFIG FILE's own directory. Absolute values pass
+# through unchanged (back-compat with old absolute configs / golden_test.sh).
+def resolve_ref_path(config_path, deployment, value):
+    if value is None:
+        return None
+    if os.path.isabs(str(value)):
+        return value
+    cfg_dir = os.path.dirname(os.path.abspath(config_path))
+    refs_root = os.environ.get("TFP_REFS") or deployment.get("refs_root")
+    if refs_root is None:
+        # no refs_root available: anchor the value itself to the config dir
+        return os.path.normpath(os.path.join(cfg_dir, str(value)))
+    if not os.path.isabs(str(refs_root)):
+        refs_root = os.path.normpath(os.path.join(cfg_dir, str(refs_root)))
+    return os.path.join(refs_root, str(value))
+
 # ---------------------------
 # CLI
 # ---------------------------
@@ -254,7 +274,11 @@ def main():
     deployment, method = load_config_sections(args.config)
     window_size_arg = resolve(args.window_size, method.get("window_size"), 5000)
     step           = resolve(args.step,        method.get("step"),        15)
-    chrom_sizes_path = resolve(args.chrom_sizes, deployment.get("chrom_sizes"), None)
+    # CHANGED: resolve the config's chrom_sizes (may be relative to refs_root) the same
+    # way config_helper.py does, BEFORE applying CLI > config > fallback precedence.
+    cfg_chrom_sizes = (resolve_ref_path(args.config, deployment, deployment.get("chrom_sizes"))
+                       if args.config else None)
+    chrom_sizes_path = resolve(args.chrom_sizes, cfg_chrom_sizes, None)
     if not chrom_sizes_path:
         print("[FATAL] chrom_sizes not provided (pass --chrom_sizes or set deployment.chrom_sizes in --config)", file=sys.stderr)
         sys.exit(1)

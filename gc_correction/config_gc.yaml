@@ -3,8 +3,12 @@
 # Do NOT copy Stage-2's mapq:30 / frag_len 120-200 in here — that would break byte-identity.
 
 deployment:
-  # --- the ONE line to change when you consolidate refs into tfp_profiling/refs ---
-  refs_root:      /cluster/work/medinfmk/cfDNA-SeCT/results/BAM/gc_uncorrected/griffin/Ref
+  # Refs are bundled in the project. This value is resolved RELATIVE TO THIS CONFIG
+  # FILE's folder (gc_correction/), so ../refs = <repo>/refs. Because it's anchored to
+  # the config (not the shell's CWD), the whole project folder can be moved or mounted
+  # anywhere and this keeps working. Override with the TFP_REFS env var if the refs
+  # ever live OUTSIDE the repo (shared filesystem / read-only container mount).
+  refs_root:      ../refs
   # all of these are relative to refs_root (join happens in the driver):
   reference_fa:   hg38.fa                                                  # needs hg38.fa.fai beside it
   mappable_bed:   k100_minus_exclusion_lists.mappable_regions.hg38.bed
@@ -12,9 +16,12 @@ deployment:
   genome_gc_freq: genome_GC_frequency                                      # the dir of <name>.<len>bp.GC_frequency.txt files
 
   sample_sheet:   stage1_samples.tsv        # relative -> resolved next to this config file
-  # results_root: GC_counts/ and GC_bias/ are written under here. Set so GC_bias/
-  # lands where your Stage-2 samples.tsv expects it (…/irene_tfp/data/GC_bias/…):
-  results_root:   /cluster/work/medinfmk/cfDNA-SeCT/irene_tfp/data
+  # Results written INSIDE the project: ../results = <repo>/results (also anchored to
+  # this config's folder). GC_counts/ and GC_bias/ land under here; the Stage-1->Stage-2
+  # seam reads the ACTUAL paths from the manifest, so moving this doesn't break Stage 2.
+  # To direct the results somewhere else, override with --results-root DIR on the command line, e.g.
+  # here:   run_gc_correction.sh --results-root DIR      (or run_all.sh --out-root DIR)
+  results_root:   ../results
   threads:        8                         # prefix-sum peaks ~3 GB at 8 threads; request --mem>=8G
 
 method:

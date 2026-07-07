@@ -1,0 +1,6 @@
+sample_id	bam
+# One row per sample: <sample_id><TAB><absolute path to .bam>. This sheet is the
+# single source of truth for which samples exist; everything downstream flows from it.
+# The driver skips this header line and any line starting with '#'.
+# bam paths stay ABSOLUTE (they're inputs, not bundled refs) — do not make them relative.
+SeCT-26_t1	/cluster/work/medinfmk/cfDNA-SeCT/results/BAM/gc_uncorrected/SeCT-26_t1.sortByCoord.bam

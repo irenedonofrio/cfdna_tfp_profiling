@@ -11,8 +11,18 @@ Two modes:
   config <config.yaml> KEY [KEY ...]
       Look up scalar (or list-of-scalars) keys across the merged
       deployment + method sections and print `<UPPER_KEY>='value'`.
-      Lists are space-joined (only used for simple token lists such as
-      chromosome names). Errors on unknown keys, cross-section name
+
+      PATH RESOLUTION (so the whole project folder is relocatable):
+        * refs_root       : anchored to THIS config file's folder; the TFP_REFS
+                            env var overrides it (for refs mounted outside the repo).
+        * ref-typed keys  : reference_fa, mappable_bed, chrom_sizes, tf_dir,
+                            genome_gc_freq -> joined onto refs_root when relative.
+        * dir-typed keys  : sample_sheet, results_root, fcc_root -> anchored to
+                            THIS config file's folder when relative.
+        * everything else : emitted verbatim (threads, mapq, autosomes, tmpdir, ...).
+      Absolute values ALWAYS pass through unchanged (back-compat with old configs).
+
+      Lists are space-joined. Errors on unknown keys, cross-section name
       collisions, or nested structures.
 
   sample <samples.tsv> <sample_id>
@@ -24,9 +34,10 @@ Usage from the driver:
     eval "$(python config_helper.py config config.yaml threads results_root tf_dir chrom_sizes)"
     eval "$(python config_helper.py sample samples.tsv "$SAMPLE")"
 
-Dependencies: pyyaml (already in tfp_env). No other dependencies.
+Dependencies: pyyaml (already in the env). No other dependencies.
 """
 
+import os
 import sys
 import csv
 import shlex
@@ -51,6 +62,12 @@ def emit(key, value):
 # --------------------------------------------------------------------------
 # config mode
 # --------------------------------------------------------------------------
+# Keys whose relative values are joined onto refs_root:
+_REF_RELATIVE = {"reference_fa", "mappable_bed", "chrom_sizes", "tf_dir", "genome_gc_freq"}
+# Keys whose relative values are anchored to the config file's own directory:
+_DIR_RELATIVE = {"sample_sheet", "results_root", "fcc_root", "refs_root"}
+
+
 def cmd_config(args):
     if len(args) < 2:
         die("usage: config <config.yaml> KEY [KEY ...]")
@@ -79,10 +96,39 @@ def cmd_config(args):
                 die(f"key '{k}' present in both deployment and method sections")
             merged[k] = v
 
+    # ---- path anchoring ------------------------------------------------------
+    # Relative paths are resolved so the project folder can be moved/mounted
+    # anywhere. Absolute paths are returned unchanged.
+    cfg_dir = os.path.dirname(os.path.abspath(cfg_path))
+
+    def anchor(p):
+        p = str(p)
+        return p if os.path.isabs(p) else os.path.normpath(os.path.join(cfg_dir, p))
+
+    # refs_root: TFP_REFS env var wins; else the config value; anchored to cfg_dir.
+    refs_root_raw = os.environ.get("TFP_REFS") or merged.get("refs_root")
+    refs_root = anchor(refs_root_raw) if refs_root_raw is not None else None
+
+    def resolve(k, v):
+        if k in _REF_RELATIVE:
+            if os.path.isabs(str(v)):
+                return v
+            if refs_root is None:
+                die(f"key '{k}' is relative but no refs_root (and no TFP_REFS) is set")
+            return os.path.join(refs_root, str(v))
+        if k == "refs_root":
+            if refs_root is None:
+                die("key 'refs_root' requested but neither refs_root nor TFP_REFS is set")
+            return refs_root
+        if k in _DIR_RELATIVE:
+            return anchor(v)
+        return v  # non-path keys: verbatim (threads, mapq, autosomes, tmpdir, ...)
+
     for k in keys:
-        if k not in merged:
+        # refs_root may come solely from TFP_REFS, so allow it even if absent in the file.
+        if k not in merged and k != "refs_root":
             die(f"key '{k}' not found in config (looked in deployment + method)")
-        emit(k, merged[k])
+        emit(k, resolve(k, merged.get(k)))
 
 
 # --------------------------------------------------------------------------

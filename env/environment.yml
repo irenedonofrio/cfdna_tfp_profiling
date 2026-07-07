@@ -1,26 +1,36 @@
-name: griffin
-# Channel order matters: conda-forge first, then bioconda. Combined with
-# `channel_priority: strict` (set below / in your conda config) this is what
-# prevents the conda-forge vs defaults conflicts (e.g. the libffi error).
+# Single runtime environment for the whole cfDNA TF-profiling pipeline
+# (Stage 1 GC correction + seam + Stage 2 nucleosome profiling).
+#
+# Scope: ONLY packages actually imported by the .py scripts or called by the .sh
+# scripts. Everything else from the old `griffin` / `tfp_env` exports (R, jupyter,
+# snakemake, picard, seaborn, scikit-learn, bedtools, ...) is deliberately dropped.
+#
+# Versions are anchored on the validated tfp_env (Stage 2) stack so Stage 2 needs
+# NO re-validation. Stage 1 moves onto this stack (pandas 3.0->2.3, pysam 0.24->0.23,
+# numpy 2.4->2.3) and must be re-checked ONCE against its frozen golden output.
+#
+# Base OS (container image) is assumed to provide bash, coreutils, sed, grep,
+# gzip, findutils — those are NOT conda packages here. gawk IS pinned, because a
+# slim image may ship mawk/busybox-awk, and 02_fcc_count.sh needs gawk specifically
+# (mawk's srand is non-deterministic across processes -> breaks seeded RNG).
+
+name: tfp
 channels:
   - conda-forge
   - bioconda
 dependencies:
-  # --- core runtime ---
+  # ---- Python runtime ----
   - python=3.11
-  - pysam            # BAM/CRAM reading + reference fasta access
-  - samtools         # CRAM->BAM, indexing, fast (multithreaded) decode
-  - numpy
-  - pandas>=2.0      # the modernized scripts target pandas 2.x
 
-  # --- stage 1 (GC correction) ---
-  - pyyaml           # manifest.py read side
-  - matplotlib-base  # GC_bias QC plots (skippable via --no_plots; -base = no GUI deps)
+  # ---- Python libraries (imported by the .py scripts) ----
+  - numpy=2.3.4            # Stage 1 counts (cumsum, default_rng); Stage 2 profiling/merge
+  - pandas=2.3.3           # all *.py I/O + masking  (single pandas version — see header)
+  - scipy=1.16.2           # 04_merge_and_extract.py: savgol_filter, zscore
+  - pysam=0.23.3           # Stage 1 griffin_GC_counts_prefixsum.py: BAM + FASTA reads
+  - pyyaml=6.0.3           # config_helper.py, both drivers, both 04_*.py
+  - matplotlib-base=3.10.7 # Stage 1 griffin_GC_bias.py QC plots (only with --plots; Agg)
 
-  # --- nice-to-have for reproducible builds ---
-  - conda-lock       # to generate the fully-pinned lock file for the container
-
-# NOTE: this lists the GC-correction stage dependencies. When you fold in the
-# nucleosome_profiling scripts, add any extra packages they need here (or keep
-# them as a separate optional group if you want GC-correction installs to stay
-# lean).
+  # ---- command-line tools (called from the .sh scripts) ----
+  - gawk                   # 02_fcc_count.sh — REQUIRED, gawk not mawk (seeded RNG)
+  - samtools=1.22.1        # 02_fcc_count.sh: faidx, view
+  - parallel=20250822      # 02_fcc_count.sh + run_profiling.sh: per-chrom / per-TF pools
