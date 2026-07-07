@@ -26,6 +26,8 @@ outputs/
 *.fq
 *.fastq.gz
 *.fq.gz
+*.fa
+*.fai
 *.vcf
 *.vcf.gz
 *.bed.gz
