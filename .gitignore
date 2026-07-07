@@ -17,6 +17,7 @@ env/                      # <-- REMOVE this line if env/ holds conda .yml config
 demo_out/
 results/
 outputs/
+refs/
 
 # Large data / bioinformatics artifacts — never version these
 *.bam
