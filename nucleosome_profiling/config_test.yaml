@@ -1,5 +1,0 @@
-deployment:
-  chrom_sizes: /cluster/work/medinfmk/cfDNA-SeCT/irene_tfp/refs/hg38.standard.chrom.sizes
-method:
-  window_size: 5000
-  step: 15

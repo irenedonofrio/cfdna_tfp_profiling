@@ -1,14 +1,10 @@
 # TF Profiling — Comparison to upstream Griffin & change record
 
-**Purpose.** This is the labelled record of how the nucleosome-profiling stage of this
-pipeline relates to upstream Griffin, which divergences are *deliberate* (part of the
-method) versus *accidental* (drift/bugs), and exactly what was changed in the
-robustness/correctness pass. It is the Stage-2 analogue of the Stage-1 `NOTICE`. It also records pipeline-wide infrastructure changes (environment consolidation, path handling) that affect both stages — see §10.
+This file is to  record the divergences and exactly what was changed. It is the Stage-2 analogue of the Stage-1 `NOTICE`. It also records pipeline-wide infrastructure changes (environment consolidation, path handling) that affect both stages — see §10.
 
 **Upstream reference.** Griffin (Doebley et al. 2022), commit
 `b624c7a2ea7b8758b6eebd424066c815bfeece61`, Clear BSD License, Fred Hutchinson Cancer
-Research Center. Method influences: Ulz et al. 2019 (frequency decomposition / accessibility,
-consumed downstream) and De Sarkar et al. 2023.
+Research Center. 
 
 ---
 
@@ -23,11 +19,8 @@ This pipeline instead computes a **genome-wide GC-corrected midpoint track once 
 `04_merge_and_extract.py`. With hundreds of TF bed files this reads the BAM once instead of
 hundreds of times.
 
-**Consequence:** "bit-identical to Griffin" does **not** apply to this stage — it computes
-different intermediate objects on purpose. The correctness baseline is this pipeline's *own
-current output*, frozen as a golden file. Changes are therefore split into:
-- **Track A — behaviour-preserving** (must reproduce the frozen output), and
-- **Track B — behaviour-changing** (change output by design; justified individually).
+**Consequence:** "bit-identical to Griffin" does **not** apply to this stage: Because this stage works differently from Griffin, its output is close to Griffin's but not an exact
+(On CDX2 with the same sites, the two profiles match to r = 0.997 and the features to within a few percent; see §11.)
 
 ## 2. Script mapping
 
@@ -39,22 +32,22 @@ current output*, frozen as a golden file. Changes are therefore split into:
 
 ## 3. Stage-by-stage verdict
 
-| Step | Griffin | This pipeline | Verdict |
-|---|---|---|---|
-| Read filter | paired, mapq≥q, not dup, not qcfail, fwd + TLEN>0 | proper-pair, not dup, fwd (`-f 0x2 -F 0x410`), mapq≥30 | Kept (does not drop `qcfail 0x200` — negligible) |
-| Fragment length | 100–200 | 120–200 | **Intended** (aligns with collaborator's filter) |
-| GC from reference over full fragment span | yes | yes (span matches exactly) | Kept |
-| GC base classes | A/T/W→0, C/G/S→1, ambiguous→seeded per-base RNG | see §5 | **Was drift → fixed** |
-| GC-bias < 0.05 excluded | yes | yes (`>= 0.05`) | Kept |
+| Step | Griffin | This pipeline | Verdict                                                  |
+|---|---|---|----------------------------------------------------------|
+| Read filter | paired, mapq≥q, not dup, not qcfail, fwd + TLEN>0 | proper-pair, not dup, fwd (`-f 0x2 -F 0x410`), mapq≥30 | Kept (does not drop `qcfail 0x200` — negligible)         |
+| Fragment length | 100–200 | 120–200 | **Intended** (aligns with Maria Lambrinos's filter)      |
+| GC from reference over full fragment span | yes | yes (span matches exactly) | Kept                                                     |
+| GC base classes | A/T/W→0, C/G/S→1, ambiguous→seeded per-base RNG | see §5 | **Was drift → fixed**                                    |
+| GC-bias < 0.05 excluded | yes | yes (`>= 0.05`) | Kept                                                     |
 | Midpoint | `floor((start+end)/2)`, 0-based | `int((2·POS+len)/2)`, 1-based | Formula kept; 1 bp coord offset in stage 04 (documented) |
-| Windowing / bin sum | fetch ±5000, sum per 15 bp | slice ±5000, sum per 15 bp | Kept |
-| Strand orientation | reverses `-` sites | strand ignored | **Intended** (GTRD sites unstranded, `.`) |
-| Region/mappability exclusion | per-bin at merge | pre-filtered via mappable BED at counting | **Intended** |
-| Outlier mask | z-score axis=None on *uncorrected*, `<10`, min_cutoff=2 fallback | identical | Kept (line for line) |
-| Order: average → smooth → normalize | yes | yes | Kept (aggregate-then-normalize, same as Griffin) |
-| Savgol window | `floor(165/15)=11`, odd, order 3 | same | Kept |
-| Features (mean / central / FFT-index-10) | yes | yes (same windows & index) | Kept |
-| `n_sites` | `len(current_sites)` | (was left-edge bin) | **Was bug → fixed** |
+| Windowing / bin sum | fetch ±5000, sum per 15 bp | slice ±5000, sum per 15 bp | Kept                                                     |
+| Strand orientation | reverses `-` sites | strand ignored | **Intended** (GTRD sites unstranded, `.`)                |
+| Region/mappability exclusion | per-bin at merge | pre-filtered via mappable BED at counting | **Intended**                                             |
+| Outlier mask | z-score axis=None on *uncorrected*, `<10`, min_cutoff=2 fallback | identical | Kept (line for line)                                     |
+| Order: average → smooth → normalize | yes | yes | Kept (aggregate-then-normalize, same as Griffin)         |
+| Savgol window | `floor(165/15)=11`, odd, order 3 | same | Kept                                                     |
+| Features (mean / central / FFT-index-10) | yes | yes (same windows & index) | Kept                                                     |
+| `n_sites` | `len(current_sites)` | (was left-edge bin) | **Was bug → fixed**                                      |
 
 ## 4. Intended divergences (keep — these define the method)
 
@@ -92,45 +85,16 @@ Every edit is tagged `# CHANGED:` in the source; comment-only notes are tagged `
 | Strand note | `04_profile_tf_sites.py` | — | none (documentation) |
 | Coord-offset note | `04_profile_tf_sites.py` | — | none (documentation) |
 
-Because the S-fix and `n_sites` change output **by design**, freeze a golden output from the
-*current* scripts first, then confirm only these move. See §8.
 
-## 7. Deferred / documented-only
 
-- **D2 distribution**: replace `int(rand()*2*N)` with a per-base coin-flip (sum of N draws) to
-  match Griffin's binomial. Left for now; effect is tiny (ambiguous bases rare in mappable
-  regions). Seeding already makes it deterministic **under gawk**.
-- **GC counting in awk is inherently fragile** (S-class handling, RNG determinism, and
-  awk-implementation dependence — mawk vs gawk). The robust long-term fix, consistent with
-  Stage 1, is to compute fragment GC in the already-validated Python path and *share that one
-  function* between the GC-bias builder and this corrector ("share the computation"), instead of
-  maintaining a second awk implementation. Deferred, but this is the direction if the
-  reproducibility guarantees need to tighten.
-- **Portability items** for the USZ container step (status updated):
-  - Slurm array orchestrators replaced with plain-bash drivers — **done** (`run_profiling.sh`,
-    `run_gc_correction.sh`, master `run_all.sh`).
-  - `02` no longer self-runs `conda activate` — **done**. Environment activation is now the
-    caller's responsibility for every leaf script; the drivers only preflight-check it. In the
-    container this is `micromamba run -n tfp <cmd>`.
-  - `gawk` installed by the environment — **done**. It is pinned in `environment.yml` and the
-    single `tfp` env now provides it (§10.1). `02_fcc_count.sh` still guards for it and errors
-    if absent.
-  - `manifest.py` seam — **retired, not wired in**. The Stage-1→Stage-2 handoff is the
-    `gc_correction_manifest.tsv` → `build_stage2_sheet.py` → `samples.tsv` seam
-    (keyed on the bare `sample_id`). `common/manifest.py` wrote a Griffin-format
-    `samples.GC.yaml` keyed on `<name>.sortByCoord`, which nothing downstream consumes; it is
-    kept only as an optional Griffin-YAML compatibility shim.
+## 7. Validation
 
-## 8. Validation
-
-Run `golden_test.sh` (see the script header for the config block). It:
+Run `golden_test.sh`. It:
 1. runs the **current** `04_*` scripts and the **edited** `04_*` scripts on the *same* existing
    FCC input (two small chromosomes, a TF subset), and
 2. calls `compare_outputs.py`, which asserts the composite **profiles are identical** and every
    feature **except `n_sites` is identical**, and reports the `n_sites` old→new change.
 
-An optional awk micro-check demonstrates the S-fix and the seeding on synthetic sequences
-without re-running the genome-wide counting.
 
 `sparse_golden_test.sh` separately gates the sparse-FCC change (§9): it builds a sparse copy
 from an existing dense FCC (no BAM/re-count needed), runs `04` on both, and asserts the
@@ -158,25 +122,12 @@ Measured on `SeCT-26_t2` (whole sample):
 | chr2 | 621 MB | 40 MB | |
 | chr22 | 127 MB | 5.2 MB | |
 
-Note: gzip already compressed the long runs of zeros well, so the **disk** win understates the
-real benefit. The zeros were expensive in **RAM**: `pd.read_csv` re-expands a dense file to its
-full row count (~248M for chr1) regardless of gzip ratio, whereas the sparse file loads only the
-covered rows. The memory/load-time reduction scales with the *row-count* drop (larger than 18×),
-which is what removes the OOM risk when the USZ node runs many chromosomes in parallel. The
-per-chromosome row counts printed by `sparse_golden_test.sh` are the figures to use for
-container sizing.
 
-**Caveats.** (1) Do not feed sparse FCC into legacy dense-assuming scripts (Maria's
-`smooth_all_files.sh`, `filter_blacklist_bedtools.sh`). (2) The sparse gate proved the *format*
-is safe by filtering existing dense FCC; when the sparse `02` is next used to recompute a sample,
-run the optional `SPARSE_02_DIR` check in `sparse_golden_test.sh` to confirm the *script* emits
-exactly those rows byte-for-byte.
+**Caveats.** Do not feed sparse FCC into legacy dense-assuming scripts (Maria's
+`smooth_all_files.sh`, `filter_blacklist_bedtools.sh`)
 
 ## 10. Pipeline infrastructure changes (both stages)
 
-These are not method changes — they alter *how* the pipeline is built and run, not what it
-computes. Each is validated against a frozen golden so it is provably output-preserving
-(Track A) unless noted.
 
 ### 10.1 Environment consolidation — two envs → one `tfp`
 
@@ -185,8 +136,7 @@ replaced by a single minimal `environment.yml`, scoped to only what the scripts 
 or call: `numpy`, `pandas`, `scipy`, `pysam`, `pyyaml`, `matplotlib-base`; `gawk`, `samtools`,
 `parallel`. Everything else from the old exports (R/tidyverse, jupyter, snakemake, picard,
 seaborn, scikit-learn, bedtools, whittaker-eilers, …) was dropped as unused. `gawk` was **added
-explicitly** — it was absent from both prior exports (the cluster supplied it as the system
-`awk`), and `02_fcc_count.sh` requires it.
+explicitly** — it was absent from both prior exports and `02_fcc_count.sh` requires it.
 
 **Version anchor.** The single env is pinned on the validated **Stage-2** stack
 (pandas 2.3.3, numpy 2.3.4, scipy 1.16.2, pysam 0.23.3, samtools 1.22.1). Rationale:
@@ -207,12 +157,6 @@ explicitly** — it was absent from both prior exports (the cluster supplied it 
 Stage-2 numeric re-validation was needed; the end-to-end `run_all.sh` run
 (`SeCT-26_t1`, FOXA1/GRHL2/SPI1) completed with all 22 chromosomes profiled and features written.
 
-**Fallback.** If a future Stage-1 golden re-run ever diverges on this env, do not force one env:
-keep two micromamba envs inside the single container (`micromamba run -n <env>`), the documented
-plan B.
-
-**Reproducibility for the container.** `environment.yml` pins only the top-level packages; the
-full transitive tree is frozen for the image with `conda-lock -p linux-64` (SE colleague's step).
 
 ### 10.2 Relocatable paths — bundled refs + repo-relative outputs
 
@@ -244,8 +188,51 @@ driver or run standalone.
 configs behave exactly as before (every resolver returns absolute inputs unchanged), so the
 change is a strict superset. Confirmed by the end-to-end `run_all.sh` run in §10.1.
 
-### 10.3 Side effect — single `chrom_sizes` path
 
-Previously the two configs referenced `chrom_sizes` at two different cluster paths (Stage 1 under
-`griffin/Ref`, Stage 2 under `irene_tfp/refs`). With bundled refs both now resolve to the same
-`refs/hg38.standard.chrom.sizes`, removing that duplication.
+## 11. External validation vs upstream Griffin — CDX2, identical sites
+
+Direct comparison against **upstream Griffin's actual output** on the **same
+BAM and the same site list**, so any difference is attributable to the method, not the inputs.
+
+**Setup.** Sample `SeCT-26_t1`, TF `CDX2`. To remove the confound of different bed files, CDX2 was
+re-profiled on **Griffin's own site list**
+(`/cluster/work/medinfmk/cfDNA-SeCT/results/BAM/gc_uncorrected/griffin/CDX2_binding_sites_without_blacklisted.tsv`, 286558 sites, `position` column used as the summit
+verbatim), not the GTRD `TFBS_10000ms` bed. Griffin reference:
+`/cluster/work/medinfmk/cfDNA-SeCT/results/BAM/gc_uncorrected/griffin/snakemakes/griffin_nucleosome_profiling/results/sample_name_12.GC_corrected.coverage.tsv`, `GC_corrected` +
+smoothed row (the analogue of this pipeline's `normalized_FCC`). Compared on the overlapping
+±990 bp window (132 bins, 15 bp grid).
+
+**Result.**
+
+| Quantity | Griffin | This pipeline | Δ |
+|---|---|---|---|
+| `n_sites` / `number_of_sites` | 286558 | 286558 | **0 (exact)** |
+| Profile Pearson r | — | — | **0.9970** |
+| mean ratio (yours/griffin) | — | — | 1.0031 |
+| residual max\|Δ\| / rms | — | — | 0.0070 / 0.0035 |
+| mean_coverage | 0.98296 | 0.98605 | +0.31% |
+| central_coverage | 0.96807 | 0.97414 | +0.63% |
+| amplitude | 0.05774 | 0.05407 | −6.3% |
+
+**Reading.**
+- **`n_sites` exact.** On the identical bed, this pipeline's site loader reproduces Griffin's
+  `len(current_sites)` to the site
+- **r = 0.9970.** The composites are the same curve: both resolve the CDX2 central nucleosome
+  depletion and flanking structure identically in shape.
+- **The residual is smooth, sign-consistent, and centre-weighted**, the tighter fragment window
+  (120–200 vs Griffin's 100–200) and mapq 30 make the central depletion read slightly shallower,
+  and the different normalization window sets the ~0.3% global level (`mean ratio` 1.0031).
+- **amplitude −6.3%** is the one feature with a real gap, and it is the expected consequence of
+  the same effect: amplitude is the FFT magnitude of the profile oscillation, so a shallower
+  central dip lowers it. Same order of magnitude, same regime.
+
+**Verdict.** On identical sites, the redesigned genome-wide-track-and-slice architecture
+reproduces Griffin's CDX2 profile shape near-perfectly (r = 0.997) and its scalar features within
+a few percent, with every residual attributable to a documented intended divergence (§4). This is
+the intended outcome for a deliberate reimplementation — high fidelity to Griffin's signal without
+claiming bit-identity.
+
+**Caveat for the features table.** This CDX2 row was computed on Griffin's bed (286558 sites),
+whereas the pipeline's default `TFBS_10000ms` CDX2 bed differs. If CDX2 is later re-profiled under
+the default `tf_dir`, its row is replaced (§ upsert behaviour) and `n_sites` will no longer be
+286558. Keep this Griffin-bed CDX2 result isolated (separate `--results-root`) if it must persist.

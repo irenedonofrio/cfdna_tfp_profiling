@@ -193,7 +193,8 @@ fi
 # ------------------------------- STAGE 04a: PROFILE --------------------------
 # Wipe stale intermediates/composites so a re-run with a DIFFERENT TF selection
 # can't leave old TFs in the merged output.
-rm -rf "$OUTPUT_DIR/intermediate" "$OUTPUT_DIR/composite"
+#rm -rf "$OUTPUT_DIR/intermediate" "$OUTPUT_DIR/composite"
+rm -rf "$OUTPUT_DIR/intermediate"
 
 PROF_JOBLOG="$OUTPUT_DIR/_prof_joblog.tsv"; rm -f "$PROF_JOBLOG"
 echo "[PROF] profiling ${#CHROMS_PRESENT[@]} chromosomes (up to $THREADS in parallel)..."

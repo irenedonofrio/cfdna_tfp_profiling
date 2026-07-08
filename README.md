@@ -63,8 +63,6 @@ The pipeline expects these under `refs/` (paths in both configs are relative to
   named `k100_minus_exclusion_lists.mappable_regions.hg38.<len>bp.GC_frequency.txt` (this is derived from original Griffin's `Ref/` files)
 - `TFBS_10000ms/` — TF binding-site BEDs (one per TF)
 
-Each input BAM must have its `.bai` index beside it.
-
 
 ## Quick start
 
@@ -82,7 +80,8 @@ bash run_all.sh --out-root /scratch/$USER/test   # redirect all outputs (dry-run
 **1. Everything, end to end (all samples)**
 ```
 bash run_all.sh
-bash run_all.sh --tfs FOXA1,GRHL2,SPI1       # restrict TFs
+bash run_all.sh --tfs FOXA1,GRHL2,SPI1       # restrict TFs 
+bash run_all.sh --tfs /path/to/tf_list.txt  # or a TF list file (one name per line)
 ```
 
 **2. GC correction only (all samples)**

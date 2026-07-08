@@ -1,2 +1,2 @@
 sample_id	bam	gc_bias	fcc_dir
-SeCT-26_t2	/cluster/work/medinfmk/cfDNA-SeCT/results/BAM/gc_uncorrected/SeCT-26_t2.sortByCoord.bam	/cluster/work/medinfmk/cfDNA-SeCT/irene_tfp/data/GC_bias/SeCT-26_t2.sortByCoord.GC_bias.txt	/cluster/work/medinfmk/cfDNA-SeCT/irene_tfp/data/samples/SeCT-26_t2/fcc
+SeCT-26_t1	/cluster/work/medinfmk/cfDNA-SeCT/results/BAM/gc_uncorrected/SeCT-26_t1.sortByCoord.bam	/cluster/work/medinfmk/cfDNA-SeCT/irene_tfp/data/GC_bias/SeCT-26_t1.sortByCoord.GC_bias.txt	/cluster/work/medinfmk/cfDNA-SeCT/irene_tfp/data/samples/SeCT-26_t1/fcc

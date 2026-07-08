@@ -1,23 +1,45 @@
 This project includes code derived from Griffin.
- 
+
   Upstream:  https://github.com/adoebley/Griffin
   Commit:    b624c7a2ea7b8758b6eebd424066c815bfeece61
   License:   The Clear BSD License
   Copyright: (c) 2021 Fred Hutchinson Cancer Research Center
- 
+
 The original Clear BSD license terms are retained and apply to the derived
-files. A copy of the license should be kept alongside this NOTICE (copy the
-LICENSE file from the upstream Griffin repository).
- 
-Summary of modifications in this project:
-  - gc_correction/griffin_GC_counts.py: optimized GC counting (C-level fast
-    path with an exact, seeded fallback for ambiguous bases), itertuples
-    iteration, finer parallel chunking, and pandas>=2.0 compatible
-    aggregation. Output is bit-identical to the original.
-  - gc_correction/griffin_GC_bias.py: replaced removed pandas .append calls
-    with pd.concat (output unchanged); added an optional --no_plots flag and a
-    headless-safe matplotlib backend; smoothing left unchanged.
-  - common/manifest.py: helper to read/write samples.GC.yaml (the format is
-    byte-compatible with the original Griffin snakefile output).
-  - workflows/run_gc_correction.sh: terminal driver (no Snakemake/SLURM).
-  - tests/: correctness, regression, and demo-comparison scripts.
+files. A copy of the license is kept alongside this NOTICE (the LICENSE file
+from the upstream Griffin repository).
+
+Summary of modifications in this project. The nucleosome-profiling stage is a
+deliberate architectural reimplementation; see
+COMPARISON.md for the labelled, evidence-backed record of every change (which
+divergences are intended vs. bugs, and their validation).
+
+Stage 1 — GC correction (gc_correction/):
+  - griffin_GC_counts_prefixsum.py: prefix-sum rewrite of Griffin's GC counting.
+    Builds a per-chromosome cumulative-GC array once (O(1) per-fragment GC via
+    array subtraction, no per-fragment reference fetch), with an exact seeded
+    fallback for ambiguous IUPAC bases so results stay BIT-IDENTICAL to the
+    original. Per-chromosome parallelism.
+  - griffin_GC_bias.py: replaced removed pandas .append with pd.concat (output
+    unchanged); added an optional --no_plots flag and a headless-safe matplotlib
+    backend; smoothing unchanged.
+
+Stage 2 — nucleosome profiling (nucleosome_profiling/), all Griffin-derived:
+  - 02_fcc_count.sh: GC-corrected midpoint (FCC) counting as a genome-wide track
+    (vs Griffin's per-site coverage), sparse output. Derived from griffin_coverage.
+  - 04_profile_tf_sites.py: slices +/-5 kb windows around TFBS from the FCC track
+    and bins to 15 bp. Derived from griffin_merge_sites.
+  - 04_merge_and_extract.py: outlier mask -> composite -> smooth -> normalize ->
+    feature extraction. Derived from griffin_merge_sites.
+  See COMPARISON.md for the full stage-by-stage mapping, intended divergences,
+  fixed bugs, and validation (including external validation vs Griffin on CDX2).
+
+Pipeline / orchestration (not derived from Griffin; original to this project):
+  - run_all.sh, gc_correction/run_gc_correction.sh,
+    nucleosome_profiling/run_profiling.sh: plain-bash drivers (no Snakemake/SLURM).
+  - build_stage2_sheet.py, nucleosome_profiling/config_helper.py: the
+    Stage-1 -> Stage-2 seam (gc_correction_manifest.tsv -> samples.tsv) and the
+    config/sheet reader.
+  - environment.yml: single consolidated runtime environment.
+
+The active Stage-1 -> Stage-2 handoff is the gc_correction_manifest.tsv -> build_stage2_sheet.py -> samples.tsv seam.

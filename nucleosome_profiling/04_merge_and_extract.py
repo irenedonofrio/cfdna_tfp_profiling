@@ -57,6 +57,47 @@ def resolve(cli_value, config_value, fallback):
     return fallback
 
 # -----------------------------------------------------------
+# Provenance (for the upsert into all_TF_features.tsv)
+# -----------------------------------------------------------
+# CHANGED: since the features table now accumulates rows across runs (upsert),
+# guard against silently mixing rows computed under DIFFERENT method params.
+# We stamp a small sidecar with a signature of the config's method: section and
+# WARN (non-blocking) if a later run's signature differs. All of this is a no-op
+# when --config is not given (e.g. golden_test.sh passes params on the CLI), so
+# the fresh-write path stays byte-identical and no sidecar is created.
+_PROVENANCE_SIDECAR = ".all_TF_features.method"
+
+def _method_signature(config_path):
+    if not config_path:
+        return None
+    import yaml, json, hashlib
+    with open(config_path) as fh:
+        cfg = yaml.safe_load(fh) or {}
+    method = cfg.get("method", {}) or {}
+    blob = json.dumps(method, sort_keys=True, default=str)
+    return hashlib.sha1(blob.encode()).hexdigest()[:12]
+
+def _stamp_provenance(results_dir, config_path):
+    sig = _method_signature(config_path)
+    if sig is None:
+        return
+    (Path(results_dir) / _PROVENANCE_SIDECAR).write_text(sig + "\n")
+
+def _warn_provenance_mismatch(results_dir, config_path):
+    sig = _method_signature(config_path)
+    if sig is None:
+        return
+    sidecar = Path(results_dir) / _PROVENANCE_SIDECAR
+    if sidecar.exists():
+        prev = sidecar.read_text().strip()
+        if prev != sig:
+            print(f"[WARN] method params differ from the run that produced the existing "
+                  f"all_TF_features.tsv (sig {prev} -> {sig}). The upserted table will MIX "
+                  f"rows computed under different parameters. Use a fresh --results-root if "
+                  f"this is a different analysis.", file=sys.stderr)
+    _stamp_provenance(results_dir, config_path)  # update to current run's signature
+
+# -----------------------------------------------------------
 # Argument parser
 # -----------------------------------------------------------
 def parse_args():
@@ -350,12 +391,28 @@ def main():
 
     # Create features summary DataFrame
     if features_list:
-        features_df = pd.DataFrame(features_list)
+        run_df = pd.DataFrame(features_list)
         cols = ['TF', 'mean_coverage', 'central_coverage', 'amplitude', 'n_sites']
-        features_df = features_df[cols]
+        run_df = run_df[cols]
         features_file = results_dir / "all_TF_features.tsv"
-        features_df.to_csv(features_file, sep="\t", index=False)
-        print(f"[INFO] Saved features summary: {features_file}", file=sys.stderr)
+
+        # CHANGED: UPSERT this run's TF rows into an existing table instead of
+        # overwriting the whole file. Rows for TFs profiled in a previous run are
+        # preserved; a TF profiled again replaces its own row. If no table exists
+        # yet, the file is written exactly as before (byte-identical fresh output).
+        if features_file.exists():
+            _warn_provenance_mismatch(results_dir, args.config)  # non-blocking
+            prev = pd.read_csv(features_file, sep="\t")
+            keep = prev[~prev['TF'].isin(run_df['TF'])] if 'TF' in prev.columns else prev.iloc[0:0]
+            combined = pd.concat([keep, run_df], ignore_index=True)
+            combined = combined[cols].sort_values('TF').reset_index(drop=True)
+            combined.to_csv(features_file, sep="\t", index=False)
+            print(f"[INFO] Upserted {len(run_df)} TF(s) into {features_file} "
+                  f"({len(combined)} total after merge)", file=sys.stderr)
+        else:
+            run_df.to_csv(features_file, sep="\t", index=False)
+            _stamp_provenance(results_dir, args.config)
+            print(f"[INFO] Saved features summary: {features_file}", file=sys.stderr)
 
     successful = len(features_list)
     print(f"[INFO] Completed {successful}/{len(tf_names)} TFs successfully", file=sys.stderr)
