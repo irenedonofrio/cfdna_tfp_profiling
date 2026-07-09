@@ -1,0 +1,800 @@
+tf	n_autosomal_sites	n_written	status
+AHR	102554	10000	kept
+ALX4	97	0	dropped: <10000 autosomal sites
+AR	1578961	10000	kept
+ARID3A	10991	10000	kept
+ARID3B	2828	0	dropped: <10000 autosomal sites
+ARID5B	1982	0	dropped: <10000 autosomal sites
+ARNT	140280	10000	kept
+ARNT2	577	0	dropped: <10000 autosomal sites
+ARNTL	51193	10000	kept
+ASCL1	161593	10000	kept
+ASCL2	27310	10000	kept
+ASH1L	1241	0	dropped: <10000 autosomal sites
+ATF1	51701	10000	kept
+ATF2	73397	10000	kept
+ATF3	128791	10000	kept
+ATF4	44835	10000	kept
+ATF5	1407	0	dropped: <10000 autosomal sites
+ATF6	1426	0	dropped: <10000 autosomal sites
+ATF7	51975	10000	kept
+ATOH1	12449	10000	kept
+BACH1	10529	10000	kept
+BACH2	11883	10000	kept
+BARHL1	1073	0	dropped: <10000 autosomal sites
+BARX1	1174	0	dropped: <10000 autosomal sites
+BARX2	1786	0	dropped: <10000 autosomal sites
+BATF	48333	10000	kept
+BATF2	11	0	dropped: <10000 autosomal sites
+BATF3	53207	10000	kept
+BBX	39	0	dropped: <10000 autosomal sites
+BCL11A	42076	10000	kept
+BCL11B	14512	10000	kept
+BCL6	101389	10000	kept
+BCL6B	1001	0	dropped: <10000 autosomal sites
+BHLHE40	71348	10000	kept
+BHLHE41	16	0	dropped: <10000 autosomal sites
+BPTF	9977	0	dropped: <10000 autosomal sites
+CASZ1	23739	10000	kept
+CDC5L	1352	0	dropped: <10000 autosomal sites
+CDX1	183	0	dropped: <10000 autosomal sites
+CDX2	156037	10000	kept
+CEBPA	302861	10000	kept
+CEBPB	720367	10000	kept
+CEBPD	33312	10000	kept
+CEBPE	211	0	dropped: <10000 autosomal sites
+CEBPG	57465	10000	kept
+CEBPZ	1614	0	dropped: <10000 autosomal sites
+CIC	671	0	dropped: <10000 autosomal sites
+CLOCK	86653	10000	kept
+CREB1	242128	10000	kept
+CREB3	1644	0	dropped: <10000 autosomal sites
+CREB3L1	4125	0	dropped: <10000 autosomal sites
+CREB3L2	136	0	dropped: <10000 autosomal sites
+CREB3L4	2111	0	dropped: <10000 autosomal sites
+CREB5	27550	10000	kept
+CREBL2	193	0	dropped: <10000 autosomal sites
+CREM	47277	10000	kept
+CTCF	1403866	10000	kept
+CTCFL	67862	10000	kept
+CUX1	5450	0	dropped: <10000 autosomal sites
+CXXC1	12127	10000	kept
+CXXC4	5089	0	dropped: <10000 autosomal sites
+DACH1	4106	0	dropped: <10000 autosomal sites
+DBP	1154	0	dropped: <10000 autosomal sites
+DDIT3	17187	10000	kept
+DEAF1	11435	10000	kept
+DLX1	4256	0	dropped: <10000 autosomal sites
+DLX2	2205	0	dropped: <10000 autosomal sites
+DLX4	997	0	dropped: <10000 autosomal sites
+DLX6	976	0	dropped: <10000 autosomal sites
+DMRT1	739	0	dropped: <10000 autosomal sites
+DNMT1	1265	0	dropped: <10000 autosomal sites
+DRAP1	16037	10000	kept
+DUX4	113645	10000	kept
+E2F1	196659	10000	kept
+E2F2	2298	0	dropped: <10000 autosomal sites
+E2F3	5835	0	dropped: <10000 autosomal sites
+E2F4	21859	10000	kept
+E2F5	3294	0	dropped: <10000 autosomal sites
+E2F6	60584	10000	kept
+E2F7	19456	10000	kept
+E2F8	180828	10000	kept
+E4F1	9205	0	dropped: <10000 autosomal sites
+EBF1	80444	10000	kept
+EBF3	48808	10000	kept
+EGR1	68835	10000	kept
+EGR2	79237	10000	kept
+EGR3	100179	10000	kept
+EHF	21600	10000	kept
+ELF1	153296	10000	kept
+ELF2	1002	0	dropped: <10000 autosomal sites
+ELF3	107872	10000	kept
+ELF4	8288	0	dropped: <10000 autosomal sites
+ELF5	471	0	dropped: <10000 autosomal sites
+ELK1	6691	0	dropped: <10000 autosomal sites
+ELK3	39114	10000	kept
+ELK4	8892	0	dropped: <10000 autosomal sites
+EMX1	969	0	dropped: <10000 autosomal sites
+EN1	31366	10000	kept
+EOMES	31809	10000	kept
+EPAS1	32795	10000	kept
+ERF	20387	10000	kept
+ERG	529820	10000	kept
+ESR1	2460997	10000	kept
+ESR2	20917	10000	kept
+ESRRA	46869	10000	kept
+ETS1	388564	10000	kept
+ETS2	4168	0	dropped: <10000 autosomal sites
+ETV1	39663	10000	kept
+ETV2	33668	10000	kept
+ETV4	20997	10000	kept
+ETV5	45755	10000	kept
+ETV6	29145	10000	kept
+ETV7	5727	0	dropped: <10000 autosomal sites
+EVX1	10	0	dropped: <10000 autosomal sites
+FEV	2104	0	dropped: <10000 autosomal sites
+FEZF1	25398	10000	kept
+FLI1	407166	10000	kept
+FOS	255506	10000	kept
+FOSB	22534	10000	kept
+FOSL1	39015	10000	kept
+FOSL2	122564	10000	kept
+FOXA1	1339513	10000	kept
+FOXA2	1056914	10000	kept
+FOXA3	32448	10000	kept
+FOXC1	601	0	dropped: <10000 autosomal sites
+FOXD2	1251	0	dropped: <10000 autosomal sites
+FOXD3	33	0	dropped: <10000 autosomal sites
+FOXE1	1888	0	dropped: <10000 autosomal sites
+FOXF1	125	0	dropped: <10000 autosomal sites
+FOXF2	147	0	dropped: <10000 autosomal sites
+FOXG1	636	0	dropped: <10000 autosomal sites
+FOXH1	30471	10000	kept
+FOXJ2	1923	0	dropped: <10000 autosomal sites
+FOXK1	13616	10000	kept
+FOXK2	15487	10000	kept
+FOXM1	119198	10000	kept
+FOXN3	6611	0	dropped: <10000 autosomal sites
+FOXO1	95871	10000	kept
+FOXO3	15018	10000	kept
+FOXO4	600	0	dropped: <10000 autosomal sites
+FOXP1	157120	10000	kept
+FOXP2	5084	0	dropped: <10000 autosomal sites
+FOXP3	7490	0	dropped: <10000 autosomal sites
+FOXQ1	37	0	dropped: <10000 autosomal sites
+FOXR2	291	0	dropped: <10000 autosomal sites
+GABPA	109778	10000	kept
+GATA1	190731	10000	kept
+GATA2	694586	10000	kept
+GATA3	293203	10000	kept
+GATA4	234243	10000	kept
+GATA6	144968	10000	kept
+GATAD2A	178385	10000	kept
+GATAD2B	143124	10000	kept
+GCM2	19904	10000	kept
+GFI1	82857	10000	kept
+GFI1B	8411	0	dropped: <10000 autosomal sites
+GLI1	8320	0	dropped: <10000 autosomal sites
+GLI2	4969	0	dropped: <10000 autosomal sites
+GLI3	748	0	dropped: <10000 autosomal sites
+GLI4	1297	0	dropped: <10000 autosomal sites
+GLIS1	75393	10000	kept
+GLIS2	8103	0	dropped: <10000 autosomal sites
+GLIS3	23828	10000	kept
+GMEB1	4214	0	dropped: <10000 autosomal sites
+GMEB2	7110	0	dropped: <10000 autosomal sites
+GRHL1	8229	0	dropped: <10000 autosomal sites
+GRHL2	81189	10000	kept
+GRHL3	71100	10000	kept
+GTF2B	2057	0	dropped: <10000 autosomal sites
+GTF3A	257	0	dropped: <10000 autosomal sites
+GZF1	139	0	dropped: <10000 autosomal sites
+HAND1	1318	0	dropped: <10000 autosomal sites
+HAND2	45683	10000	kept
+HBP1	6426	0	dropped: <10000 autosomal sites
+HES1	52009	10000	kept
+HES2	11501	10000	kept
+HES4	402	0	dropped: <10000 autosomal sites
+HES5	30	0	dropped: <10000 autosomal sites
+HES7	59	0	dropped: <10000 autosomal sites
+HESX1	2	0	dropped: <10000 autosomal sites
+HEY1	50572	10000	kept
+HEY2	453	0	dropped: <10000 autosomal sites
+HEYL	5001	0	dropped: <10000 autosomal sites
+HHEX	3412	0	dropped: <10000 autosomal sites
+HIC1	16514	10000	kept
+HIC2	38	0	dropped: <10000 autosomal sites
+HIF1A	225770	10000	kept
+HIF3A	27927	10000	kept
+HINFP	5874	0	dropped: <10000 autosomal sites
+HIVEP1	4	0	dropped: <10000 autosomal sites
+HIVEP3	3	0	dropped: <10000 autosomal sites
+HLF	21344	10000	kept
+HMBOX1	13944	10000	kept
+HMG20A	24334	10000	kept
+HMG20B	5765	0	dropped: <10000 autosomal sites
+HMGA1	29811	10000	kept
+HMGA2	56	0	dropped: <10000 autosomal sites
+HNF1A	16995	10000	kept
+HNF1B	38056	10000	kept
+HNF4A	190887	10000	kept
+HNF4G	28426	10000	kept
+HOMEZ	28374	10000	kept
+HOXA1	1064	0	dropped: <10000 autosomal sites
+HOXA10	259	0	dropped: <10000 autosomal sites
+HOXA13	94	0	dropped: <10000 autosomal sites
+HOXA2	5868	0	dropped: <10000 autosomal sites
+HOXA4	4213	0	dropped: <10000 autosomal sites
+HOXA5	5764	0	dropped: <10000 autosomal sites
+HOXA6	6835	0	dropped: <10000 autosomal sites
+HOXA7	132	0	dropped: <10000 autosomal sites
+HOXA9	51552	10000	kept
+HOXB13	152161	10000	kept
+HOXB4	1225	0	dropped: <10000 autosomal sites
+HOXB5	21	0	dropped: <10000 autosomal sites
+HOXB6	442	0	dropped: <10000 autosomal sites
+HOXB7	105	0	dropped: <10000 autosomal sites
+HOXB8	28278	10000	kept
+HOXC11	71	0	dropped: <10000 autosomal sites
+HOXC13	155	0	dropped: <10000 autosomal sites
+HOXC5	24874	10000	kept
+HOXC6	1169	0	dropped: <10000 autosomal sites
+HOXC8	3030	0	dropped: <10000 autosomal sites
+HOXC9	15333	10000	kept
+HOXD1	996	0	dropped: <10000 autosomal sites
+HOXD11	99	0	dropped: <10000 autosomal sites
+HOXD4	17	0	dropped: <10000 autosomal sites
+HOXD9	13	0	dropped: <10000 autosomal sites
+HSF1	60707	10000	kept
+HSF2	639	0	dropped: <10000 autosomal sites
+HSF4	26	0	dropped: <10000 autosomal sites
+IKZF1	157065	10000	kept
+IKZF2	12621	10000	kept
+IKZF3	35079	10000	kept
+IKZF5	18846	10000	kept
+IRF1	66688	10000	kept
+IRF2	34952	10000	kept
+IRF3	8691	0	dropped: <10000 autosomal sites
+IRF4	112096	10000	kept
+IRF5	1921	0	dropped: <10000 autosomal sites
+IRF8	13	0	dropped: <10000 autosomal sites
+IRF9	40033	10000	kept
+IRX2	568	0	dropped: <10000 autosomal sites
+IRX3	45	0	dropped: <10000 autosomal sites
+IRX5	22	0	dropped: <10000 autosomal sites
+ISL1	27930	10000	kept
+ISL2	6	0	dropped: <10000 autosomal sites
+JDP2	1973	0	dropped: <10000 autosomal sites
+JUN	405328	10000	kept
+JUNB	145993	10000	kept
+JUND	166618	10000	kept
+KAT7	16350	10000	kept
+KDM2B	78546	10000	kept
+KDM5B	122356	10000	kept
+KLF1	37896	10000	kept
+KLF10	13844	10000	kept
+KLF11	27461	10000	kept
+KLF12	5928	0	dropped: <10000 autosomal sites
+KLF13	2167	0	dropped: <10000 autosomal sites
+KLF14	253	0	dropped: <10000 autosomal sites
+KLF15	17391	10000	kept
+KLF16	22945	10000	kept
+KLF17	3578	0	dropped: <10000 autosomal sites
+KLF3	9905	0	dropped: <10000 autosomal sites
+KLF4	183993	10000	kept
+KLF5	87121	10000	kept
+KLF6	39418	10000	kept
+KLF7	1055	0	dropped: <10000 autosomal sites
+KLF8	4787	0	dropped: <10000 autosomal sites
+KLF9	37413	10000	kept
+KMT2A	423238	10000	kept
+KMT2B	159924	10000	kept
+LCORL	2320	0	dropped: <10000 autosomal sites
+LEF1	14949	10000	kept
+LHX2	5252	0	dropped: <10000 autosomal sites
+LHX3	39	0	dropped: <10000 autosomal sites
+LHX4	264	0	dropped: <10000 autosomal sites
+LHX5	19	0	dropped: <10000 autosomal sites
+LHX6	6	0	dropped: <10000 autosomal sites
+LHX9	9243	0	dropped: <10000 autosomal sites
+LMX1B	93	0	dropped: <10000 autosomal sites
+LYL1	74345	10000	kept
+MAF	62900	10000	kept
+MAFB	3592	0	dropped: <10000 autosomal sites
+MAFF	43647	10000	kept
+MAFG	18723	10000	kept
+MAFK	74369	10000	kept
+MAX	288473	10000	kept
+MAZ	144068	10000	kept
+MBD1	4853	0	dropped: <10000 autosomal sites
+MBD2	15071	10000	kept
+MBD3	17025	10000	kept
+MECOM	70206	10000	kept
+MECP2	75286	10000	kept
+MEF2A	20231	10000	kept
+MEF2B	48469	10000	kept
+MEF2C	12889	10000	kept
+MEF2D	3205	0	dropped: <10000 autosomal sites
+MEIS1	21554	10000	kept
+MEIS2	19193	10000	kept
+MEOX2	25	0	dropped: <10000 autosomal sites
+MGA	4594	0	dropped: <10000 autosomal sites
+MITF	151834	10000	kept
+MIXL1	23855	10000	kept
+MLX	10450	10000	kept
+MLXIP	52087	10000	kept
+MNT	46560	10000	kept
+MNX1	125	0	dropped: <10000 autosomal sites
+MSC	30370	10000	kept
+MSX1	592	0	dropped: <10000 autosomal sites
+MSX2	23	0	dropped: <10000 autosomal sites
+MXD1	1056	0	dropped: <10000 autosomal sites
+MXI1	15345	10000	kept
+MYB	125962	10000	kept
+MYBL1	951	0	dropped: <10000 autosomal sites
+MYBL2	18372	10000	kept
+MYC	687866	10000	kept
+MYCN	427373	10000	kept
+MYF5	11766	10000	kept
+MYF6	159	0	dropped: <10000 autosomal sites
+MYNN	12564	10000	kept
+MYOD1	216341	10000	kept
+MYOG	107059	10000	kept
+MYRF	7853	0	dropped: <10000 autosomal sites
+MZF1	3817	0	dropped: <10000 autosomal sites
+NANOG	106276	10000	kept
+NEUROD1	176575	10000	kept
+NEUROD2	110	0	dropped: <10000 autosomal sites
+NEUROG2	61296	10000	kept
+NEUROG3	22	0	dropped: <10000 autosomal sites
+NFAT5	2277	0	dropped: <10000 autosomal sites
+NFATC1	49167	10000	kept
+NFATC2	8265	0	dropped: <10000 autosomal sites
+NFATC3	13337	10000	kept
+NFATC4	13	0	dropped: <10000 autosomal sites
+NFE2	198784	10000	kept
+NFE2L1	5113	0	dropped: <10000 autosomal sites
+NFE2L2	27266	10000	kept
+NFE2L3	193	0	dropped: <10000 autosomal sites
+NFIA	28149	10000	kept
+NFIB	11988	10000	kept
+NFIC	72394	10000	kept
+NFIL3	40165	10000	kept
+NFKB1	304950	10000	kept
+NFKB2	62354	10000	kept
+NFXL1	1599	0	dropped: <10000 autosomal sites
+NFYA	157399	10000	kept
+NFYB	6290	0	dropped: <10000 autosomal sites
+NFYC	12339	10000	kept
+NHLH1	11	0	dropped: <10000 autosomal sites
+NKX2-1	113124	10000	kept
+NKX2-2	2057	0	dropped: <10000 autosomal sites
+NKX2-3	1386	0	dropped: <10000 autosomal sites
+NKX2-5	7961	0	dropped: <10000 autosomal sites
+NKX2-8	68	0	dropped: <10000 autosomal sites
+NKX3-1	23326	10000	kept
+NKX6-1	572	0	dropped: <10000 autosomal sites
+NR0B1	676	0	dropped: <10000 autosomal sites
+NR1D1	142	0	dropped: <10000 autosomal sites
+NR1H2	9550	0	dropped: <10000 autosomal sites
+NR1H3	29702	10000	kept
+NR1H4	2259	0	dropped: <10000 autosomal sites
+NR1I2	416	0	dropped: <10000 autosomal sites
+NR2C1	6439	0	dropped: <10000 autosomal sites
+NR2C2	26103	10000	kept
+NR2E3	12	0	dropped: <10000 autosomal sites
+NR2F1	57327	10000	kept
+NR2F2	208587	10000	kept
+NR2F6	50854	10000	kept
+NR3C1	495432	10000	kept
+NR3C2	24	0	dropped: <10000 autosomal sites
+NR4A1	28691	10000	kept
+NR4A2	28	0	dropped: <10000 autosomal sites
+NR5A1	77	0	dropped: <10000 autosomal sites
+NR5A2	40365	10000	kept
+NRF1	38690	10000	kept
+OLIG2	35554	10000	kept
+ONECUT2	251716	10000	kept
+OSR2	21741	10000	kept
+OTX1	5	0	dropped: <10000 autosomal sites
+OTX2	239635	10000	kept
+OVOL2	13452	10000	kept
+PATZ1	9927	0	dropped: <10000 autosomal sites
+PAX2	60623	10000	kept
+PAX3	28311	10000	kept
+PAX5	90748	10000	kept
+PAX6	4920	0	dropped: <10000 autosomal sites
+PAX7	7878	0	dropped: <10000 autosomal sites
+PAX8	444	0	dropped: <10000 autosomal sites
+PBX1	35003	10000	kept
+PBX2	16873	10000	kept
+PBX3	80648	10000	kept
+PBX4	67220	10000	kept
+PDX1	89933	10000	kept
+PGR	699749	10000	kept
+PHF21A	565	0	dropped: <10000 autosomal sites
+PHOX2B	110299	10000	kept
+PITX1	261	0	dropped: <10000 autosomal sites
+PITX3	11157	10000	kept
+PKNOX1	48967	10000	kept
+PLAG1	11356	10000	kept
+POU2AF1	2497	0	dropped: <10000 autosomal sites
+POU2F1	30578	10000	kept
+POU2F2	31353	10000	kept
+POU3F2	11798	10000	kept
+POU5F1	279469	10000	kept
+PPARA	112	0	dropped: <10000 autosomal sites
+PPARD	10788	10000	kept
+PPARG	542725	10000	kept
+PRDM1	39715	10000	kept
+PRDM10	29527	10000	kept
+PRDM12	3059	0	dropped: <10000 autosomal sites
+PRDM14	14638	10000	kept
+PRDM4	2013	0	dropped: <10000 autosomal sites
+PRDM5	2055	0	dropped: <10000 autosomal sites
+PRDM6	23985	10000	kept
+PRDM9	77344	10000	kept
+PROX1	21618	10000	kept
+RARA	138592	10000	kept
+RARB	192	0	dropped: <10000 autosomal sites
+RARG	17776	10000	kept
+RAX2	75	0	dropped: <10000 autosomal sites
+RBAK	37831	10000	kept
+RBPJ	101152	10000	kept
+REL	25507	10000	kept
+RELA	809392	10000	kept
+RELB	77145	10000	kept
+REST	163690	10000	kept
+RFX1	23653	10000	kept
+RFX2	3284	0	dropped: <10000 autosomal sites
+RFX3	3315	0	dropped: <10000 autosomal sites
+RFX5	19093	10000	kept
+RFX7	355	0	dropped: <10000 autosomal sites
+RLF	329	0	dropped: <10000 autosomal sites
+RORA	378	0	dropped: <10000 autosomal sites
+RORC	44140	10000	kept
+RUNX1	681765	10000	kept
+RUNX2	112905	10000	kept
+RUNX3	38157	10000	kept
+RXRA	189552	10000	kept
+RXRB	28457	10000	kept
+SALL2	39	0	dropped: <10000 autosomal sites
+SALL3	10023	10000	kept
+SALL4	4384	0	dropped: <10000 autosomal sites
+SATB1	91795	10000	kept
+SCRT1	55144	10000	kept
+SCRT2	16702	10000	kept
+SETBP1	380	0	dropped: <10000 autosomal sites
+SETDB1	62914	10000	kept
+SIX1	2629	0	dropped: <10000 autosomal sites
+SIX2	48567	10000	kept
+SIX4	152	0	dropped: <10000 autosomal sites
+SIX5	14078	10000	kept
+SMAD1	96952	10000	kept
+SMAD3	160788	10000	kept
+SMAD4	77434	10000	kept
+SMAD5	16167	10000	kept
+SNAI1	1784	0	dropped: <10000 autosomal sites
+SNAI2	221632	10000	kept
+SOX10	3221	0	dropped: <10000 autosomal sites
+SOX11	59	0	dropped: <10000 autosomal sites
+SOX13	37478	10000	kept
+SOX15	24	0	dropped: <10000 autosomal sites
+SOX17	39676	10000	kept
+SOX2	137888	10000	kept
+SOX3	2359	0	dropped: <10000 autosomal sites
+SOX4	54996	10000	kept
+SOX5	28211	10000	kept
+SOX6	9318	0	dropped: <10000 autosomal sites
+SOX8	167557	10000	kept
+SOX9	11571	10000	kept
+SP1	234197	10000	kept
+SP140	91502	10000	kept
+SP2	34030	10000	kept
+SP3	6179	0	dropped: <10000 autosomal sites
+SP4	24373	10000	kept
+SP5	118312	10000	kept
+SP7	8810	0	dropped: <10000 autosomal sites
+SPDEF	29569	10000	kept
+SPI1	973121	10000	kept
+SPIB	25864	10000	kept
+SRCAP	33801	10000	kept
+SREBF1	5965	0	dropped: <10000 autosomal sites
+SREBF2	79143	10000	kept
+SRF	79345	10000	kept
+STAT1	260598	10000	kept
+STAT2	110865	10000	kept
+STAT3	220298	10000	kept
+STAT4	30330	10000	kept
+STAT5A	178615	10000	kept
+STAT5B	203888	10000	kept
+STAT6	13591	10000	kept
+T	30718	10000	kept
+TAL1	319655	10000	kept
+TBP	170879	10000	kept
+TBX1	1894	0	dropped: <10000 autosomal sites
+TBX2	23523	10000	kept
+TBX21	60405	10000	kept
+TBX3	2344	0	dropped: <10000 autosomal sites
+TBX5	29623	10000	kept
+TCF12	188178	10000	kept
+TCF21	43342	10000	kept
+TCF3	86541	10000	kept
+TCF4	150888	10000	kept
+TCF7	17529	10000	kept
+TCF7L1	33780	10000	kept
+TCF7L2	115402	10000	kept
+TCFL5	12	0	dropped: <10000 autosomal sites
+TEAD1	149236	10000	kept
+TEAD2	1832	0	dropped: <10000 autosomal sites
+TEAD3	20650	10000	kept
+TEAD4	182610	10000	kept
+TERF1	2251	0	dropped: <10000 autosomal sites
+TERF2	1113	0	dropped: <10000 autosomal sites
+TET1	1000	0	dropped: <10000 autosomal sites
+TET2	26669	10000	kept
+TET3	6665	0	dropped: <10000 autosomal sites
+TFAP2A	110809	10000	kept
+TFAP2C	196083	10000	kept
+TFAP4	129195	10000	kept
+TFCP2	520	0	dropped: <10000 autosomal sites
+TFDP1	10474	10000	kept
+TFDP2	5	0	dropped: <10000 autosomal sites
+TFE3	15415	10000	kept
+TFEB	5857	0	dropped: <10000 autosomal sites
+TGIF1	1	0	dropped: <10000 autosomal sites
+TGIF2	3525	0	dropped: <10000 autosomal sites
+THAP1	1415	0	dropped: <10000 autosomal sites
+THAP11	28131	10000	kept
+THRA	424	0	dropped: <10000 autosomal sites
+THRB	9780	0	dropped: <10000 autosomal sites
+TLX1	8299	0	dropped: <10000 autosomal sites
+TP53	444433	10000	kept
+TP63	330728	10000	kept
+TP73	20105	10000	kept
+TRPS1	685335	10000	kept
+TSHZ1	959	0	dropped: <10000 autosomal sites
+TWIST1	33186	10000	kept
+UBP1	3707	0	dropped: <10000 autosomal sites
+USF1	89359	10000	kept
+USF2	74813	10000	kept
+VDR	100469	10000	kept
+VEZF1	51325	10000	kept
+WT1	168716	10000	kept
+XBP1	52434	10000	kept
+YBX1	1100	0	dropped: <10000 autosomal sites
+YBX3	31	0	dropped: <10000 autosomal sites
+YY1	267397	10000	kept
+YY2	7949	0	dropped: <10000 autosomal sites
+ZBED1	3383	0	dropped: <10000 autosomal sites
+ZBED4	228	0	dropped: <10000 autosomal sites
+ZBED5	1942	0	dropped: <10000 autosomal sites
+ZBTB1	266	0	dropped: <10000 autosomal sites
+ZBTB10	2288	0	dropped: <10000 autosomal sites
+ZBTB11	12600	10000	kept
+ZBTB12	2176	0	dropped: <10000 autosomal sites
+ZBTB14	10598	10000	kept
+ZBTB16	24893	10000	kept
+ZBTB17	39759	10000	kept
+ZBTB18	1318	0	dropped: <10000 autosomal sites
+ZBTB2	40808	10000	kept
+ZBTB20	6929	0	dropped: <10000 autosomal sites
+ZBTB24	7401	0	dropped: <10000 autosomal sites
+ZBTB26	29542	10000	kept
+ZBTB33	77822	10000	kept
+ZBTB40	34550	10000	kept
+ZBTB42	19103	10000	kept
+ZBTB44	2532	0	dropped: <10000 autosomal sites
+ZBTB48	112009	10000	kept
+ZBTB49	40	0	dropped: <10000 autosomal sites
+ZBTB5	987	0	dropped: <10000 autosomal sites
+ZBTB6	15090	10000	kept
+ZBTB7A	191061	10000	kept
+ZBTB7B	4295	0	dropped: <10000 autosomal sites
+ZBTB8A	8016	0	dropped: <10000 autosomal sites
+ZEB1	109951	10000	kept
+ZEB2	17579	10000	kept
+ZFAT	5938	0	dropped: <10000 autosomal sites
+ZFHX2	25906	10000	kept
+ZFHX3	7424	0	dropped: <10000 autosomal sites
+ZFP1	13446	10000	kept
+ZFP28	2231	0	dropped: <10000 autosomal sites
+ZFP3	1639	0	dropped: <10000 autosomal sites
+ZFP37	42	0	dropped: <10000 autosomal sites
+ZFP42	7802	0	dropped: <10000 autosomal sites
+ZFP64	64400	10000	kept
+ZFP69B	3499	0	dropped: <10000 autosomal sites
+ZFP82	558	0	dropped: <10000 autosomal sites
+ZFP91	3540	0	dropped: <10000 autosomal sites
+ZFX	73703	10000	kept
+ZHX1	4084	0	dropped: <10000 autosomal sites
+ZHX2	35061	10000	kept
+ZIC2	28185	10000	kept
+ZIC5	28041	10000	kept
+ZIK1	27	0	dropped: <10000 autosomal sites
+ZIM3	12644	10000	kept
+ZKSCAN1	18809	10000	kept
+ZKSCAN8	17032	10000	kept
+ZNF10	2378	0	dropped: <10000 autosomal sites
+ZNF101	2266	0	dropped: <10000 autosomal sites
+ZNF112	128	0	dropped: <10000 autosomal sites
+ZNF114	72	0	dropped: <10000 autosomal sites
+ZNF121	30693	10000	kept
+ZNF132	19	0	dropped: <10000 autosomal sites
+ZNF133	2372	0	dropped: <10000 autosomal sites
+ZNF134	3840	0	dropped: <10000 autosomal sites
+ZNF136	306	0	dropped: <10000 autosomal sites
+ZNF138	28	0	dropped: <10000 autosomal sites
+ZNF140	4615	0	dropped: <10000 autosomal sites
+ZNF143	226077	10000	kept
+ZNF146	17991	10000	kept
+ZNF148	21261	10000	kept
+ZNF157	952	0	dropped: <10000 autosomal sites
+ZNF16	505	0	dropped: <10000 autosomal sites
+ZNF169	133	0	dropped: <10000 autosomal sites
+ZNF174	9	0	dropped: <10000 autosomal sites
+ZNF175	3861	0	dropped: <10000 autosomal sites
+ZNF18	11875	10000	kept
+ZNF184	7203	0	dropped: <10000 autosomal sites
+ZNF189	5946	0	dropped: <10000 autosomal sites
+ZNF19	62	0	dropped: <10000 autosomal sites
+ZNF197	2105	0	dropped: <10000 autosomal sites
+ZNF2	2114	0	dropped: <10000 autosomal sites
+ZNF20	35	0	dropped: <10000 autosomal sites
+ZNF202	570	0	dropped: <10000 autosomal sites
+ZNF205	5890	0	dropped: <10000 autosomal sites
+ZNF211	191	0	dropped: <10000 autosomal sites
+ZNF213	1529	0	dropped: <10000 autosomal sites
+ZNF214	253	0	dropped: <10000 autosomal sites
+ZNF217	14794	10000	kept
+ZNF22	14534	10000	kept
+ZNF223	501	0	dropped: <10000 autosomal sites
+ZNF224	2740	0	dropped: <10000 autosomal sites
+ZNF23	136	0	dropped: <10000 autosomal sites
+ZNF236	611	0	dropped: <10000 autosomal sites
+ZNF239	221	0	dropped: <10000 autosomal sites
+ZNF24	19090	10000	kept
+ZNF248	127	0	dropped: <10000 autosomal sites
+ZNF250	1099	0	dropped: <10000 autosomal sites
+ZNF257	1258	0	dropped: <10000 autosomal sites
+ZNF26	557	0	dropped: <10000 autosomal sites
+ZNF260	3675	0	dropped: <10000 autosomal sites
+ZNF263	124566	10000	kept
+ZNF264	56704	10000	kept
+ZNF266	4970	0	dropped: <10000 autosomal sites
+ZNF274	11984	10000	kept
+ZNF280A	12145	10000	kept
+ZNF280D	6498	0	dropped: <10000 autosomal sites
+ZNF281	5527	0	dropped: <10000 autosomal sites
+ZNF282	1305	0	dropped: <10000 autosomal sites
+ZNF292	332	0	dropped: <10000 autosomal sites
+ZNF3	10367	10000	kept
+ZNF30	3566	0	dropped: <10000 autosomal sites
+ZNF300	87	0	dropped: <10000 autosomal sites
+ZNF302	51	0	dropped: <10000 autosomal sites
+ZNF311	39	0	dropped: <10000 autosomal sites
+ZNF316	53228	10000	kept
+ZNF317	25600	10000	kept
+ZNF320	6313	0	dropped: <10000 autosomal sites
+ZNF322	3082	0	dropped: <10000 autosomal sites
+ZNF324	8031	0	dropped: <10000 autosomal sites
+ZNF329	1542	0	dropped: <10000 autosomal sites
+ZNF331	2269	0	dropped: <10000 autosomal sites
+ZNF335	11360	10000	kept
+ZNF33A	2437	0	dropped: <10000 autosomal sites
+ZNF34	4991	0	dropped: <10000 autosomal sites
+ZNF341	40344	10000	kept
+ZNF35	35063	10000	kept
+ZNF350	2552	0	dropped: <10000 autosomal sites
+ZNF354A	540	0	dropped: <10000 autosomal sites
+ZNF354B	349	0	dropped: <10000 autosomal sites
+ZNF354C	106	0	dropped: <10000 autosomal sites
+ZNF362	2994	0	dropped: <10000 autosomal sites
+ZNF366	36883	10000	kept
+ZNF37A	695	0	dropped: <10000 autosomal sites
+ZNF382	17103	10000	kept
+ZNF384	129484	10000	kept
+ZNF391	1140	0	dropped: <10000 autosomal sites
+ZNF394	5474	0	dropped: <10000 autosomal sites
+ZNF395	20875	10000	kept
+ZNF398	4608	0	dropped: <10000 autosomal sites
+ZNF404	232	0	dropped: <10000 autosomal sites
+ZNF407	2550	0	dropped: <10000 autosomal sites
+ZNF41	1563	0	dropped: <10000 autosomal sites
+ZNF410	3102	0	dropped: <10000 autosomal sites
+ZNF416	36	0	dropped: <10000 autosomal sites
+ZNF418	601	0	dropped: <10000 autosomal sites
+ZNF419	223	0	dropped: <10000 autosomal sites
+ZNF423	1498	0	dropped: <10000 autosomal sites
+ZNF426	4415	0	dropped: <10000 autosomal sites
+ZNF433	1019	0	dropped: <10000 autosomal sites
+ZNF436	3596	0	dropped: <10000 autosomal sites
+ZNF444	9821	0	dropped: <10000 autosomal sites
+ZNF445	19	0	dropped: <10000 autosomal sites
+ZNF449	60708	10000	kept
+ZNF454	264	0	dropped: <10000 autosomal sites
+ZNF467	24034	10000	kept
+ZNF48	16845	10000	kept
+ZNF486	14052	10000	kept
+ZNF488	225	0	dropped: <10000 autosomal sites
+ZNF490	8085	0	dropped: <10000 autosomal sites
+ZNF493	38	0	dropped: <10000 autosomal sites
+ZNF501	19	0	dropped: <10000 autosomal sites
+ZNF502	457	0	dropped: <10000 autosomal sites
+ZNF507	2784	0	dropped: <10000 autosomal sites
+ZNF510	385	0	dropped: <10000 autosomal sites
+ZNF512	2769	0	dropped: <10000 autosomal sites
+ZNF512B	644	0	dropped: <10000 autosomal sites
+ZNF513	2559	0	dropped: <10000 autosomal sites
+ZNF521	21	0	dropped: <10000 autosomal sites
+ZNF524	302	0	dropped: <10000 autosomal sites
+ZNF528	2655	0	dropped: <10000 autosomal sites
+ZNF529	645	0	dropped: <10000 autosomal sites
+ZNF530	169	0	dropped: <10000 autosomal sites
+ZNF532	296	0	dropped: <10000 autosomal sites
+ZNF547	1698	0	dropped: <10000 autosomal sites
+ZNF548	401	0	dropped: <10000 autosomal sites
+ZNF549	5174	0	dropped: <10000 autosomal sites
+ZNF554	23159	10000	kept
+ZNF555	3257	0	dropped: <10000 autosomal sites
+ZNF558	2321	0	dropped: <10000 autosomal sites
+ZNF560	243	0	dropped: <10000 autosomal sites
+ZNF561	1034	0	dropped: <10000 autosomal sites
+ZNF563	2588	0	dropped: <10000 autosomal sites
+ZNF571	12	0	dropped: <10000 autosomal sites
+ZNF574	15587	10000	kept
+ZNF580	24946	10000	kept
+ZNF581	256	0	dropped: <10000 autosomal sites
+ZNF582	447	0	dropped: <10000 autosomal sites
+ZNF584	2056	0	dropped: <10000 autosomal sites
+ZNF585B	2359	0	dropped: <10000 autosomal sites
+ZNF586	2064	0	dropped: <10000 autosomal sites
+ZNF589	2653	0	dropped: <10000 autosomal sites
+ZNF592	5061	0	dropped: <10000 autosomal sites
+ZNF595	414	0	dropped: <10000 autosomal sites
+ZNF596	3120	0	dropped: <10000 autosomal sites
+ZNF597	3636	0	dropped: <10000 autosomal sites
+ZNF600	11525	10000	kept
+ZNF610	1086	0	dropped: <10000 autosomal sites
+ZNF614	10135	10000	kept
+ZNF618	3728	0	dropped: <10000 autosomal sites
+ZNF621	22	0	dropped: <10000 autosomal sites
+ZNF623	5604	0	dropped: <10000 autosomal sites
+ZNF624	27	0	dropped: <10000 autosomal sites
+ZNF626	112	0	dropped: <10000 autosomal sites
+ZNF652	18076	10000	kept
+ZNF654	15104	10000	kept
+ZNF658	10	0	dropped: <10000 autosomal sites
+ZNF660	1461	0	dropped: <10000 autosomal sites
+ZNF662	18	0	dropped: <10000 autosomal sites
+ZNF664	6595	0	dropped: <10000 autosomal sites
+ZNF667	336	0	dropped: <10000 autosomal sites
+ZNF669	561	0	dropped: <10000 autosomal sites
+ZNF677	945	0	dropped: <10000 autosomal sites
+ZNF680	6112	0	dropped: <10000 autosomal sites
+ZNF692	5397	0	dropped: <10000 autosomal sites
+ZNF697	4475	0	dropped: <10000 autosomal sites
+ZNF7	4552	0	dropped: <10000 autosomal sites
+ZNF701	8768	0	dropped: <10000 autosomal sites
+ZNF704	45	0	dropped: <10000 autosomal sites
+ZNF707	458	0	dropped: <10000 autosomal sites
+ZNF708	609	0	dropped: <10000 autosomal sites
+ZNF711	1898	0	dropped: <10000 autosomal sites
+ZNF740	2356	0	dropped: <10000 autosomal sites
+ZNF746	67	0	dropped: <10000 autosomal sites
+ZNF75A	2643	0	dropped: <10000 autosomal sites
+ZNF76	6486	0	dropped: <10000 autosomal sites
+ZNF766	4879	0	dropped: <10000 autosomal sites
+ZNF768	9685	0	dropped: <10000 autosomal sites
+ZNF770	52144	10000	kept
+ZNF774	226	0	dropped: <10000 autosomal sites
+ZNF776	13	0	dropped: <10000 autosomal sites
+ZNF777	53	0	dropped: <10000 autosomal sites
+ZNF778	6499	0	dropped: <10000 autosomal sites
+ZNF784	721	0	dropped: <10000 autosomal sites
+ZNF785	72	0	dropped: <10000 autosomal sites
+ZNF791	651	0	dropped: <10000 autosomal sites
+ZNF792	13662	10000	kept
+ZNF8	5936	0	dropped: <10000 autosomal sites
+ZNF816	1831	0	dropped: <10000 autosomal sites
+ZNF83	21386	10000	kept
+ZNF84	2531	0	dropped: <10000 autosomal sites
+ZNF843	3261	0	dropped: <10000 autosomal sites
+ZNF85	1206	0	dropped: <10000 autosomal sites
+ZNF92	13930	10000	kept
+ZSCAN16	21775	10000	kept
+ZSCAN2	2837	0	dropped: <10000 autosomal sites
+ZSCAN21	977	0	dropped: <10000 autosomal sites
+ZSCAN22	19554	10000	kept
+ZSCAN23	170	0	dropped: <10000 autosomal sites
+ZSCAN26	65	0	dropped: <10000 autosomal sites
+ZSCAN29	4790	0	dropped: <10000 autosomal sites
+ZSCAN30	2136	0	dropped: <10000 autosomal sites
+ZSCAN31	1436	0	dropped: <10000 autosomal sites
+ZSCAN4	7947	0	dropped: <10000 autosomal sites
+ZSCAN5C	958	0	dropped: <10000 autosomal sites
+ZSCAN9	13097	10000	kept
+ZXDB	4715	0	dropped: <10000 autosomal sites
+ZXDC	12949	10000	kept
+ZZZ3	715	0	dropped: <10000 autosomal sites
