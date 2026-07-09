@@ -61,8 +61,18 @@ The pipeline expects these under `refs/` (paths in both configs are relative to
 - `hg38.standard.chrom.sizes`
 - `genome_GC_frequency/` — per-length background files spanning 15–500 bp,
   named `k100_minus_exclusion_lists.mappable_regions.hg38.<len>bp.GC_frequency.txt` (this is derived from original Griffin's `Ref/` files)
-- `TFBS_10000ms/` — TF binding-site BEDs (one per TF)
+- `TFBS_10000ms/` — TF binding-site BEDs (one per TF), produced by the
+  TF-selection stage (see `tfbs_selection/`)
 
+## TF site selection (upstream)
+
+Before the two stages run, `tfbs_selection/` builds the definitive TF list and
+the per-TF binding-site BEDs that stage 2 profiles against. It starts from the
+GTRD meta-clusters catalogue, keeps only genuine sequence-specific TFs (gated on
+CIS-BP), requires ≥10,000 binding sites per TF, and keeps each TF's
+strongest-supported sites. This produces the `TFBS_10000ms/` inputs. It's run
+once to generate the site files and doesn't need re-running per sample — see
+`tfbs_selection/README.md` for the full method and how to regenerate.
 
 ## Quick start
 
