@@ -215,26 +215,46 @@ def compute_composite_profile(masked_profile, positions,step=15,smoothing_length
 # Extract features
 # -----------------------------------------------------------
 
-def extract_features(composite_df, save_window=1000, center_window=30, fft_window=960, fft_index=10, n_sites=None):
+def extract_features(composite_df, save_window=1000, center_window=30, fft_window=960,
+                     fft_index=10, n_sites=None, *, step):
     """
     Extract coverage features from the composite TF profile.
     """
     # Sort by position
     composite_df = composite_df.sort_values('position').reset_index(drop=True)
 
+    # CHANGED: `step` is required (keyword-only) and is checked against the data.
+    # The window bounds below are snapped onto this grid, so a wrong step silently
+    # reshapes every feature window -- the same class of bug as the fencepost this
+    # commit fixes. Raised rather than asserted: `python -O` strips asserts, and this
+    # guard is the only thing between a wrong step and silently wrong features.
+    _spacing = np.unique(np.diff(composite_df['position'].to_numpy()))
+    if _spacing.size != 1 or _spacing[0] != step:
+        raise ValueError(
+            f"step={step} does not match the composite bin spacing {_spacing.tolist()}"
+        )
+
+    # CHANGED: half-open windows, grid-snapped, matching Griffin's construction
+    #     np.arange(ceil(lo/step)*step, floor(hi/step)*step, step)
+    # (griffin_merge_sites.py:226-228 rounds the bounds onto the step grid; :232-234
+    # builds the columns with arange). arange is HALF-OPEN, so the right endpoint is
+    # NOT a bin. The previous closed interval (>= -w & <= w) admitted one extra bin
+    # per window: mean 133 vs 132, central 5 vs 4, FFT 129 vs 128. At 15 bp bins that
+    # made fft_index=10 read a 193.5 bp period instead of Griffin's 192.0 bp.
+
     # 1. Mean Coverage: over ±1000bp window (or specified save_window)
-    save_mask = (composite_df['position'] >= -save_window) & \
-                (composite_df['position'] <= save_window)
+    save_mask = (composite_df['position'] >= np.ceil(-save_window / step) * step) & \
+                (composite_df['position'] < np.floor(save_window / step) * step)
     mean_coverage = composite_df.loc[save_mask, 'normalized_FCC'].mean()
 
-    # 2. Central Coverage: over ±30bp window
-    center_mask = (composite_df['position'] >= -center_window) & \
-                  (composite_df['position'] <= center_window)
+    # 2. Central Coverage: over ±30bp window (same grid-snapped half-open rule)
+    center_mask = (composite_df['position'] >= np.ceil(-center_window / step) * step) & \
+                  (composite_df['position'] < np.floor(center_window / step) * step)
     central_coverage = composite_df.loc[center_mask, 'normalized_FCC'].mean()
 
-    # 3. Amplitude: FFT over ±960bp window
-    fft_mask = (composite_df['position'] >= -fft_window) & \
-               (composite_df['position'] <= fft_window)
+    # 3. Amplitude: FFT over ±960bp window (same grid-snapped half-open rule)
+    fft_mask = (composite_df['position'] >= np.ceil(-fft_window / step) * step) & \
+               (composite_df['position'] < np.floor(fft_window / step) * step)
     fft_values = composite_df.loc[fft_mask, 'normalized_FCC'].values
 
     # Check we have enough data for FFT
@@ -307,6 +327,7 @@ def process_single_tf(tf_name, intermediate_dir, final_dir, step=15, smoothing_l
             center_window=center_window,
             fft_window=fft_window,
             fft_index=fft_index,
+            step=step,        # CHANGED: required -- the grid the windows are snapped onto
             n_sites=n_sites   # CHANGED: pass the true site count through to the features
         )
 

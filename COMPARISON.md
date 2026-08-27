@@ -46,8 +46,24 @@ hundreds of times.
 | Outlier mask | z-score axis=None on *uncorrected*, `<10`, min_cutoff=2 fallback | identical | Kept (line for line)                                     |
 | Order: average → smooth → normalize | yes | yes | Kept (aggregate-then-normalize, same as Griffin)         |
 | Savgol window | `floor(165/15)=11`, odd, order 3 | same | Kept                                                     |
-| Features (mean / central / FFT-index-10) | yes | yes (same windows & index) | Kept                                                     |
+| Features (mean / central / FFT-index-10) | window = `np.arange(ceil(lo/step)*step, floor(hi/step)*step, step)` — **half-open**, right endpoint excluded (`griffin_merge_sites.py:226-228, 232-234`) | same windows & index **only after the fencepost fix**; before it the masks were closed (`>= -w & <= w`) | **Was drift → fixed**                                    |
 | `n_sites` | `len(current_sites)` | (was left-edge bin) | **Was bug → fixed**                                      |
+
+**Correction (feature windows).** The "same windows & index" verdict previously recorded on the
+features row was **false**. Griffin snaps each window bound onto the step grid and then builds the
+columns with a half-open `np.arange`, so the right endpoint is not a bin. This pipeline used closed
+intervals (`>= -w & <= w`), which admitted one extra bin in every feature window at 15 bp bins:
+
+| Window | This pipeline (pre-fix) | Griffin | Consequence |
+|---|---|---|---|
+| `save_window` ±1000 | 133 bins (−990…990) | 132 bins (−990…975) | `mean_coverage` averaged over one extra bin |
+| `center_window` ±30 | 5 bins (−30…30) | 4 bins (−30…15) | `central_coverage` averaged over one extra bin |
+| `fft_window` ±960 | 129 samples (−960…960) | 128 samples (−960…945) | `fft_index=10` read a **193.5 bp** period, not Griffin's **192.0 bp** |
+
+Note that ±1000 is not a multiple of the 15 bp step, so a bare `<` does **not** reproduce Griffin's
+save window — the bound must be floored onto the grid first. Fixed by matching Griffin's
+construction exactly in `04_merge_and_extract.py:extract_features`, which now also takes `step` as a
+required argument and rejects a `step` that disagrees with the composite's bin spacing.
 
 ## 4. Intended divergences (keep — these define the method)
 
@@ -100,9 +116,24 @@ Run `golden_test.sh`. It:
 from an existing dense FCC (no BAM/re-count needed), runs `04` on both, and asserts the
 composite profiles and features are identical.
 
-**Results (SeCT-26_t2, TFs FOXA1/GRHL2/SPI1):** both gates PASS. Stage-04 edits: profiles and
-all coverage/amplitude features bit-identical, only `n_sites` moved. Sparse: profiles and all
-features (incl. `n_sites`) bit-identical (max|Δ| = 0).
+**Results (SeCT-26_t2, TFs FOXA1/GRHL2/SPI1).**
+
+*Sparse gate:* PASS. Profiles and all features (incl. `n_sites`) bit-identical (max|Δ| = 0).
+Re-verified against the stored `tests/sparse_test_work/` artifacts.
+
+*Stage-04 gate:* **the result recorded here — "PASS, only `n_sites` moved" — was wrong.** The
+stored artifacts of that run (`tests/golden_test_work/{orig,new}/`, both trees written 2026-07-01)
+show that `central_coverage` **and** `amplitude` moved for all four TFs, with the composite
+profiles bit-identical. CDX2: amplitude 0.126326 → 0.218102 (+73%), central_coverage 0.798939 →
+0.799087. `compare_outputs.py` gates both of those columns at `--feature-tol 0`, so on those
+artifacts it prints **FAIL (something else moved)** — not PASS. Stating it plainly: this section
+recorded a pass for a gate that fails.
+
+The cause is the feature-window fencepost corrected in §3. The stage-04 edit changed `center_mask`
+and `fft_mask` from Griffin's half-open convention to closed intervals. `mean_coverage` did **not**
+move in that run because its window was **already** closed before the edit — that fencepost
+predates the stage-04 change and is present in **both** stored runs, which is why it left no trace
+in this gate.
 
 ## 9. Dense vs sparse FCC
 
@@ -214,23 +245,36 @@ smoothed row (the analogue of this pipeline's `normalized_FCC`). Compared on the
 | central_coverage | 0.96807 | 0.97414 | +0.63% |
 | amplitude | 0.05774 | 0.05407 | −6.3% |
 
+> **All three scalar-feature rows above were computed with the pre-fix (closed-interval) feature
+> windows and are superseded.** They are retained only as a record of what was measured. See the
+> amplitude bullet below.
+
 **Reading.**
 - **`n_sites` exact.** On the identical bed, this pipeline's site loader reproduces Griffin's
   `len(current_sites)` to the site
 - **r = 0.9970.** The composites are the same curve: both resolve the CDX2 central nucleosome
   depletion and flanking structure identically in shape.
-- **The residual is smooth, sign-consistent, and centre-weighted**, the tighter fragment window
-  (120–200 vs Griffin's 100–200) and mapq 30 make the central depletion read slightly shallower,
-  and the different normalization window sets the ~0.3% global level (`mean ratio` 1.0031).
-- **amplitude −6.3%** is the one feature with a real gap, and it is the expected consequence of
-  the same effect: amplitude is the FFT magnitude of the profile oscillation, so a shallower
-  central dip lowers it. Same order of magnitude, same regime.
+- **The residual is smooth, sign-consistent, and centre-weighted.** Candidate contributing terms:
+  the tighter fragment window (120–200 vs Griffin's 100–200), mapq 30, and the different
+  normalization window (~0.3% global level, `mean ratio` 1.0031).
+- **amplitude −6.3% — attribution NOT established. Requires re-derivation.** This row was computed
+  with the closed-interval feature windows (§3): a 129-sample FFT window where Griffin uses 128, so
+  `fft_index=10` read a 193.5 bp period against Griffin's 192.0 bp. That fencepost is not a small
+  term. Measured on the stage-04 golden TFs, switching that one window between the two conventions
+  moved amplitude by −0.5% (SPI1), +6.7% (GRHL2), +13.9% (FOXA1) and +73% (CDX2) — a different
+  sample and site set, so not a transfer of magnitude to the CDX2/Griffin comparison, but enough to
+  show the term can exceed 6.3% and can carry either sign. The −6.3% therefore cannot be read as
+  the consequence of the fragment window and mapq. **No replacement number is offered here: this
+  comparison must be re-run against Griffin's output after the fix.**
 
 **Verdict.** On identical sites, the redesigned genome-wide-track-and-slice architecture
-reproduces Griffin's CDX2 profile shape near-perfectly (r = 0.997) and its scalar features within
-a few percent, with every residual attributable to a documented intended divergence (§4). This is
-the intended outcome for a deliberate reimplementation — high fidelity to Griffin's signal without
-claiming bit-identity.
+reproduces Griffin's CDX2 profile **shape** near-perfectly (r = 0.9970). That part stands: `r` is
+computed on the overlapping ±990 bp window and does not depend on the feature-window fencepost.
+
+The **scalar-feature** half of this verdict is withdrawn pending re-derivation. The claim that the
+features agree "within a few percent, with every residual attributable to a documented intended
+divergence (§4)" is not supported: the feature-window fencepost was neither documented nor
+intended, and it is a larger term than the divergences it was attributed to.
 
 **Caveat for the features table.** This CDX2 row was computed on Griffin's bed (286558 sites),
 whereas the pipeline's default `TFBS_10000ms` CDX2 bed differs. If CDX2 is later re-profiled under
