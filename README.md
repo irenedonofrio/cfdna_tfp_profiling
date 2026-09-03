@@ -87,6 +87,21 @@ source .venv/bin/activate          # Windows: .venv\Scripts\activate
 uv pip install -r requirements.txt
 ```
 
+On some clusters `uv venv --python 3.12` fails with `UnknownIssuer` because uv
+downloads a standalone CPython from GitHub and does not trust the site CA.
+Use the OS certificate store, or point uv at a Python that is already installed:
+
+```
+# 1. prefer the cluster's CA bundle (most common fix)
+export UV_NATIVE_TLS=1
+# if that is not enough:
+# export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+uv venv --python 3.12 .venv
+
+# 2. or skip the download and use a local 3.12
+uv venv --python $(command -v python3.12)
+```
+
 `uv` cannot install `gawk`, `samtools`, or GNU `parallel`. Install those next
 and keep both the venv *and* the CLI tools on `PATH` when you run the pipeline.
 
