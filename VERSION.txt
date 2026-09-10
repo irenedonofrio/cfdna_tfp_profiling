@@ -1,0 +1,2 @@
+7cc4fa7b1569324b6795614a673228932f811e6e
+7cc4fa7b1569324b6795614a673228932f811e6e Thu Aug 27 09:51:34 2026 +0200 Fix feature-window fencepost: match Griffin's half-open arange
