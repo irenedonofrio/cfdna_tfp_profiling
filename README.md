@@ -19,8 +19,9 @@ A master runner (`run_all.sh`) chains stage 1 → seam → stage 2.
 cfdna_tfp_profiling/
 ├── run_all.sh                 # MASTER: stage 1 -> seam -> stage 2
 ├── build_stage2_sheet.py      # seam: gc_correction_manifest.tsv -> samples.tsv
+├── requirements.txt           # Python deps for a uv venv
 ├── env/
-|   ├──environment.yml            # single conda env for the whole pipeline
+│   └── environment.yml        # single conda env for the whole pipeline
 ├── gc_correction/             # STAGE 1
 │   ├── run_gc_correction.sh           # stage-1 driver (no scheduler)
 │   ├── config_gc.yaml                 # stage-1 params + refs_root
@@ -41,15 +42,123 @@ cfdna_tfp_profiling/
  
 ## Environment
 
-One conda environment runs both stages:
-
-```
-conda env create -f environment.yml     # or: micromamba create -f environment.yml
-conda activate tfp
-```
-
 Environment activation is the **caller's** responsibility — the drivers only
 preflight-check the env and fail loudly if it's wrong; they never activate it.
+
+Two options:
+
+1. **conda / micromamba** — one env with the Python stack *and* `gawk` /
+   `samtools` / GNU `parallel`. This is the validated pin set.
+2. **uv** — Python packages from `requirements.txt`, plus the three CLI tools
+   installed from the OS (or a small conda env). Uses current PyPI versions
+   and needs **Python ≥ 3.12**.
+
+### conda / micromamba
+
+Install [micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html) (macOS / Linux):
+
+```
+"${SHELL}" <(curl -L https://micro.mamba.pm/install.sh)
+# or: brew install micromamba
+```
+
+Then create and activate the env:
+
+```
+micromamba create -f env/environment.yml
+micromamba activate tfp
+# or, if you already have conda: conda env create -f env/environment.yml && conda activate tfp
+```
+
+### uv (Python packages)
+
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/) (macOS / Linux):
+
+```
+curl -LsSf https://astral.sh/uv/install.sh | sh
+# or: brew install uv
+```
+
+Then from the repo root:
+
+```
+uv venv --python 3.12 .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+uv pip install -r requirements.txt
+```
+
+On some clusters `uv venv --python 3.12` fails with `UnknownIssuer` because uv
+downloads a standalone CPython from GitHub and does not trust the site CA.
+Use the OS certificate store, or point uv at a Python that is already installed:
+
+```
+# 1. prefer the cluster's CA bundle (most common fix)
+export UV_NATIVE_TLS=1
+# if that is not enough:
+# export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+uv venv --python 3.12 .venv
+
+# 2. or skip the download and use a local 3.12
+uv venv --python $(command -v python3.12)
+```
+
+`uv` cannot install `gawk`, `samtools`, or GNU `parallel`. Install those next
+and keep both the venv *and* the CLI tools on `PATH` when you run the pipeline.
+
+### Command-line tools (required with uv)
+
+The shell drivers call **`gawk`** (not mawk/busybox awk), **`samtools`**, and
+**GNU `parallel`**. Debian/Ubuntu often ship `mawk` as `awk`; some systems
+install moreutils’ `parallel` instead of GNU parallel. Neither substitute works.
+
+**macOS (Homebrew)**
+
+```
+brew install gawk samtools parallel
+```
+
+**Debian / Ubuntu**
+
+```
+sudo apt-get update
+sudo apt-get install -y gawk samtools parallel
+# first-time GNU parallel citation prompt:
+echo 'will cite' | parallel --citation
+```
+
+**Fedora**
+
+```
+sudo dnf install -y gawk samtools parallel
+```
+
+**RHEL / Rocky / Alma**
+
+```
+sudo dnf install -y epel-release
+sudo dnf install -y gawk samtools parallel
+```
+
+If `samtools` is not in the distro repos, install it (or all three tools) with
+conda/micromamba instead:
+
+```
+conda install -c conda-forge -c bioconda gawk samtools parallel
+```
+
+**Check the right binaries**
+
+```
+source .venv/bin/activate    # if using uv
+python -c "import numpy, pandas, scipy, pysam, yaml, matplotlib; print('ok')"
+command -v gawk samtools parallel
+gawk --version | head -1          # GNU Awk …
+samtools --version | head -1
+parallel --version | head -1      # must say GNU parallel
+```
+
+If `parallel --version` prints a one-line usage blurb instead of “GNU
+parallel”, you have moreutils — remove it or put GNU parallel first on `PATH`.
 
 ## References
 
