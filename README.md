@@ -1,6 +1,6 @@
 # cfdna_tfp_profiling
  
-cfDNA transcription-factor profiling pipeline, built on a optimized Griffin (Doebley 2022) fragment/GC correcction. 
+cfDNA transcription-factor profiling pipeline, built on an optimized Griffin (Doebley 2022) fragment/GC correction. 
 
  
 It has two independent stages that hand off through one small
@@ -177,11 +177,17 @@ The pipeline expects these under `refs/` (paths in both configs are relative to
 
 Before the two stages run, `tfbs_selection/` builds the definitive TF list and
 the per-TF binding-site BEDs that stage 2 profiles against. It starts from the
-GTRD meta-clusters catalogue, keeps only genuine sequence-specific TFs (gated on
-CIS-BP), requires ≥10,000 binding sites per TF, and keeps each TF's
-strongest-supported sites. This produces the `TFBS_10000ms/` inputs. It's run
-once to generate the site files and doesn't need re-running per sample — see
-`tfbs_selection/README.md` for the full method and how to regenerate.
+GTRD 20.06 meta-clusters catalogue (read straight from the downloaded zip),
+keeps only genuine sequence-specific TFs (gated on CIS-BP), requires ≥10,000
+autosomal binding sites per TF (430 TFs pass), and keeps each TF's 10,000
+best-supported sites.
+Sites are ranked by `peak.count`, then by number of experiments, with
+remaining ties broken by a seeded hash rather than file order. The script
+stops if the GTRD input looks incomplete (a missing autosome, an autosome
+whose sites end early, or a cut-off last line). This produces the
+`TFBS_10000ms/` inputs. It's run once to generate the site files and doesn't
+need re-running per sample. See `tfbs_selection/README.md` for the full method
+and how to regenerate.
 
 ## Quick start
 
