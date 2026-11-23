@@ -123,9 +123,10 @@ single coordinate the profiling stage centres its window on.
 
 Inside the output folder:
 
-- **`sites/<TF>.bed`**: one file per kept TF, best site first. BED6+1 with no
-  header: chromosome, midpoint, midpoint + 1, TF, `.`, `.`, `peak.count`.
-  The profiling stage reads columns 1, 2 and 4.
+- **`sites/<TF>.bed`**: one file per kept TF, best site first. BED6 with no
+  header: chromosome, midpoint, midpoint + 1, TF, `peak.count` (in the score
+  column), `.` (strand). Keep it at exactly six columns: the profiling stage
+  reads the file with six column names and fails on any extra column.
 - **`tf_list.tsv`**: the roster. One row per TF that passed the CIS-BP gate:
   - `n_autosomal_sites`, `n_written` and `status` (`kept`, or the reason it was
     dropped);

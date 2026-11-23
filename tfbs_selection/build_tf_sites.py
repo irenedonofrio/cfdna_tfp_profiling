@@ -31,7 +31,8 @@ Pipeline (single streaming pass over the meta-clusters file):
      the selection towards chr1, chr10, chr11, ...).
 
 Outputs (under --outdir):
-  sites/<TF>.bed       chrom  pos  pos+1  TF  .  .  peak.count   (BED6+1, no header)
+  sites/<TF>.bed       chrom  pos  pos+1  TF  peak.count  .   (BED6, no header;
+                       the profiling stage reads exactly six columns)
   tf_list.tsv          one row per gated TF: site counts, status, cutoff diagnostics
   dropped_targets.tsv  GTRD targets that failed the TF gate (audit trail)
   chrom_summary.tsv    per chromosome: input rows, furthest site, kept sites
@@ -414,8 +415,10 @@ def write_outputs(res, outdir, min_sites):
         with open(os.path.join(sites_dir, f"{tf}.bed"), "w") as out:
             for peak, _n_exp, _h, chrom, start, end in top:
                 pos = (start + end) // 2           # Griffin: mean of Start/End
-                # BED6+1: chrom, start, end, name, score(.), strand(.), peak.count
-                out.write(f"{chrom}\t{pos}\t{pos + 1}\t{tf}\t.\t.\t{peak}\n")
+                # BED6: chrom, start, end, name, score=peak.count, strand(.)
+                # Exactly six columns: 04_profile_tf_sites.py reads the file with six
+                # column names and fails on any extra column.
+                out.write(f"{chrom}\t{pos}\t{pos + 1}\t{tf}\t{peak}\t.\n")
                 kept_per_chrom[canon_chrom(chrom)] += 1
         cut_peak, cut_exp = top[-1][0], top[-1][1]
         n_cut_kept = sum(1 for k in top if k[0] == cut_peak and k[1] == cut_exp)
